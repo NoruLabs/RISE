@@ -9,52 +9,30 @@ from rise.domain.services.thrust_service import (
 )
 
 
-def test_compute_thrust_matches_expected_value() -> None:
-    nozzle = Nozzle(
-        throat_area_m2=0.0008,
-        exit_area_m2=0.0048,
-    )
-
-    operating_point = OperatingPoint(
-        chamber_pressure_pa=2_000_000.0,
-        ambient_pressure_pa=101_325.0,
-        mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
-    )
-
-    thrust = compute_thrust(nozzle, operating_point)
+def test_compute_thrust_matches_expected_value(
+    valid_nozzle: Nozzle,
+    valid_operating_point: OperatingPoint,
+) -> None:
+    thrust = compute_thrust(valid_nozzle, valid_operating_point)
 
     assert thrust == pytest.approx(3905.64)
 
 
-def test_compute_specific_impulse_matches_expected_value() -> None:
-    nozzle = Nozzle(
-        throat_area_m2=0.0008,
-        exit_area_m2=0.0048,
-    )
-
-    operating_point = OperatingPoint(
-        chamber_pressure_pa=2_000_000.0,
-        ambient_pressure_pa=101_325.0,
-        mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
-    )
-
-    isp = compute_specific_impulse(nozzle, operating_point)
+def test_compute_specific_impulse_matches_expected_value(
+    valid_nozzle: Nozzle,
+    valid_operating_point: OperatingPoint,
+) -> None:
+    isp = compute_specific_impulse(valid_nozzle, valid_operating_point)
 
     assert isp == pytest.approx(221.258, abs=1e-3)
 
 
-def test_nozzle_expansion_ratio_is_computed_correctly() -> None:
-    nozzle = Nozzle(
-        throat_area_m2=0.0008,
-        exit_area_m2=0.0048,
-    )
+def test_nozzle_expansion_ratio_is_computed_correctly(
+    valid_nozzle: Nozzle,
+) -> None:
+    assert valid_nozzle.expansion_ratio == pytest.approx(6.0)
 
-    assert nozzle.expansion_ratio == pytest.approx(6.0)
-    
+
 def test_nozzle_validate_raises_when_throat_area_is_not_positive() -> None:
     nozzle = Nozzle(
         throat_area_m2=0.0,
@@ -99,75 +77,34 @@ def test_operating_point_validate_raises_when_ambient_pressure_is_negative() -> 
 
     with pytest.raises(ValueError, match="ambient_pressure_pa cannot be negative"):
         operating_point.validate()
-        
-def test_engine_compute_thrust_delegates_correctly() -> None:
-    nozzle = Nozzle(
-        throat_area_m2=0.0008,
-        exit_area_m2=0.0048,
-    )
 
-    operating_point = OperatingPoint(
-        chamber_pressure_pa=2_000_000.0,
-        ambient_pressure_pa=101_325.0,
-        mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
-    )
 
-    engine = Engine(
-        name="test-engine",
-        nozzle=nozzle,
-        operating_point=operating_point,
-    )
-
-    thrust = engine.compute_thrust()
+def test_engine_compute_thrust_delegates_correctly(valid_engine: Engine) -> None:
+    thrust = valid_engine.compute_thrust()
 
     assert thrust == pytest.approx(3905.64)
 
 
-def test_engine_compute_specific_impulse_delegates_correctly() -> None:
-    nozzle = Nozzle(
-        throat_area_m2=0.0008,
-        exit_area_m2=0.0048,
-    )
-
-    operating_point = OperatingPoint(
-        chamber_pressure_pa=2_000_000.0,
-        ambient_pressure_pa=101_325.0,
-        mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
-    )
-
-    engine = Engine(
-        name="test-engine",
-        nozzle=nozzle,
-        operating_point=operating_point,
-    )
-
-    isp = engine.compute_specific_impulse()
+def test_engine_compute_specific_impulse_delegates_correctly(
+    valid_engine: Engine,
+) -> None:
+    isp = valid_engine.compute_specific_impulse()
 
     assert isp == pytest.approx(221.258, abs=1e-3)
 
 
-def test_engine_validate_calls_component_validation() -> None:
-    nozzle = Nozzle(
+def test_engine_validate_calls_component_validation(
+    valid_operating_point: OperatingPoint,
+) -> None:
+    invalid_nozzle = Nozzle(
         throat_area_m2=0.0,
         exit_area_m2=0.0048,
     )
 
-    operating_point = OperatingPoint(
-        chamber_pressure_pa=2_000_000.0,
-        ambient_pressure_pa=101_325.0,
-        mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
-    )
-
     engine = Engine(
         name="invalid-engine",
-        nozzle=nozzle,
-        operating_point=operating_point,
+        nozzle=invalid_nozzle,
+        operating_point=valid_operating_point,
     )
 
     with pytest.raises(ValueError, match="throat_area_m2 must be greater than 0"):
