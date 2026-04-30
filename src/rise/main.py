@@ -1,5 +1,6 @@
 from rise.application.dtos.simulation_input import SimulationInput
 from rise.application.use_cases.run_simulation import RunSimulation
+from rise.interfaces.presenters.console_presenter import ConsolePresenter
 
 
 def main() -> None:
@@ -17,11 +18,8 @@ def main() -> None:
     use_case = RunSimulation()
     result = use_case.execute(request)
 
-    print("RISE - Rocket Integrated Simulation Environment")
-    print(f"Engine: {result.engine_name}")
-    print(f"Expansion ratio: {result.expansion_ratio:.3f}")
-    print(f"Thrust: {result.thrust_n:.3f} N")
-    print(f"Specific impulse: {result.specific_impulse_s:.3f} s")
+    presenter = ConsolePresenter()
+    presenter.present(result)
 
 
 if __name__ == "__main__":

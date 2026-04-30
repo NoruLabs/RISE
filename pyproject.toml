@@ -8,6 +8,17 @@ version = "0.1.0"
 description = "Rocket Integrated Simulation Environment"
 requires-python = ">=3.11"
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[project.scripts]
+rise = "rise.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
