@@ -1,19 +1,13 @@
-from rise.application.dtos.simulation_input import SimulationInput
+from pathlib import Path
+
 from rise.application.use_cases.run_simulation import RunSimulation
+from rise.infrastructure.config.engine_config_loader import load_engine_config
 from rise.interfaces.presenters.console_presenter import ConsolePresenter
 
 
 def main() -> None:
-    request = SimulationInput(
-        engine_name="pressure-fed-test",
-        throat_area_m2=0.0008,
-        exit_area_m2=0.0048,
-        chamber_pressure_pa=2_000_000.0,
-        ambient_pressure_pa=101_325.0,
-        mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
-    )
+    config_path = Path("configs/engines/pressure_fed_test.yaml")
+    request = load_engine_config(config_path)
 
     use_case = RunSimulation()
     result = use_case.execute(request)
