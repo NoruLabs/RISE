@@ -1,9 +1,6 @@
+from rise.domain.entities.engine import Engine
 from rise.domain.entities.nozzle import Nozzle
 from rise.domain.value_objects.operating_point import OperatingPoint
-from rise.domain.services.thrust_service import (
-    compute_specific_impulse,
-    compute_thrust,
-)
 
 
 def main() -> None:
@@ -20,13 +17,21 @@ def main() -> None:
         exit_pressure_pa=90_000.0,
     )
 
-    thrust_n = compute_thrust(nozzle, operating_point)
-    isp_s = compute_specific_impulse(nozzle, operating_point)
+    engine = Engine(
+        name="pressure-fed-test",
+        nozzle=nozzle,
+        operating_point=operating_point,
+    )
+
+    engine.validate()
+    thrust = engine.compute_thrust()
+    isp = engine.compute_specific_impulse()
 
     print("RISE - Rocket Integrated Simulation Environment")
-    print(f"Expansion ratio: {nozzle.expansion_ratio:.3f}")
-    print(f"Thrust: {thrust_n:.3f} N")
-    print(f"Specific impulse: {isp_s:.3f} s")
+    print(f"Engine: {engine.name}")
+    print(f"Expansion ratio: {engine.nozzle.expansion_ratio:.3f}")
+    print(f"Thrust: {thrust:.3f} N")
+    print(f"Specific impulse: {isp:.3f} s")
 
 
 if __name__ == "__main__":
