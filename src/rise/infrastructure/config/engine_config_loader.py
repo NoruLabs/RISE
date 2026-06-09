@@ -18,4 +18,9 @@ def load_engine_config(path: str | Path) -> SimulationInput:
         mass_flow_kg_s=data["mass_flow_kg_s"],
         exit_velocity_m_s=data["exit_velocity_m_s"],
         exit_pressure_pa=data["exit_pressure_pa"],
+        oxidizer=data["oxidizer"],
+        fuel=data["fuel"],
+        gamma=data["gamma"],
+        molecular_weight_kg_per_kmol=data["molecular_weight_kg_per_kmol"],
+        chamber_temperature_k=data["chamber_temperature_k"],
     )

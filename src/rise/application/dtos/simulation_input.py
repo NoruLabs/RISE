@@ -11,3 +11,8 @@ class SimulationInput:
     mass_flow_kg_s: float
     exit_velocity_m_s: float
     exit_pressure_pa: float
+    oxidizer: str
+    fuel: str
+    gamma: float
+    molecular_weight_kg_per_kmol: float
+    chamber_temperature_k: float

@@ -15,6 +15,11 @@ def test_run_simulation_returns_expected_result() -> None:
         mass_flow_kg_s=1.8,
         exit_velocity_m_s=2_200.0,
         exit_pressure_pa=90_000.0,
+        oxidizer="LOX",
+        fuel="LH2",
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
     )
 
     use_case = RunSimulation()
