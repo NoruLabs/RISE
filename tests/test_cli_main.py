@@ -23,4 +23,6 @@ def test_cli_main_runs_simulation_successfully(
     assert "Specific impulse: 221.258 s" in captured.out
     assert "Geometry:" in captured.out
     assert "Throat diameter:" in captured.out
-    assert "Chamber volume:" in captured.out
+    assert "Chamber diameter:" in captured.out
+    assert "Chamber length:" in captured.out
+    assert "Nozzle exit diameter:" in captured.out

@@ -19,6 +19,7 @@ def test_compute_geometry_returns_correct_values() -> None:
     assert result.exit_diameter_m == pytest.approx(0.0781764, abs=1e-6)
     assert result.chamber_diameter_m == pytest.approx(0.0713650, abs=1e-6)
     assert result.chamber_volume_m3 == pytest.approx(0.0006096, abs=1e-6)
+    assert result.chamber_length_m == pytest.approx(0.1524, abs=1e-6)
     assert result.converging_length_m == pytest.approx(0.0341643, abs=1e-6)
     assert result.diverging_length_m == pytest.approx(0.0863242, abs=1e-6)
     assert result.expansion_ratio == pytest.approx(6.0)
