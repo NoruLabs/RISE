@@ -16,3 +16,8 @@ class SimulationInput:
     gamma: float
     molecular_weight_kg_per_kmol: float
     chamber_temperature_k: float
+    characteristic_length_m: float
+    contraction_ratio: float
+    convergent_half_angle_deg: float
+    divergent_half_angle_deg: float
+    nozzle_length_method: str

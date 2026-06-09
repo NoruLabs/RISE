@@ -20,6 +20,11 @@ def test_run_simulation_returns_expected_result() -> None:
         gamma=1.22,
         molecular_weight_kg_per_kmol=22.0,
         chamber_temperature_k=3483.35,
+        characteristic_length_m=0.762,
+        contraction_ratio=5.0,
+        convergent_half_angle_deg=30.0,
+        divergent_half_angle_deg=15.0,
+        nozzle_length_method="80_percent_bell",
     )
 
     use_case = RunSimulation()

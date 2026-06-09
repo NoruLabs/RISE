@@ -23,4 +23,9 @@ def load_engine_config(path: str | Path) -> SimulationInput:
         gamma=data["gamma"],
         molecular_weight_kg_per_kmol=data["molecular_weight_kg_per_kmol"],
         chamber_temperature_k=data["chamber_temperature_k"],
+        characteristic_length_m=data["characteristic_length_m"],
+        contraction_ratio=data["contraction_ratio"],
+        convergent_half_angle_deg=data["convergent_half_angle_deg"],
+        divergent_half_angle_deg=data["divergent_half_angle_deg"],
+        nozzle_length_method=data["nozzle_length_method"],
     )
