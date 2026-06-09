@@ -35,3 +35,12 @@ def test_run_simulation_returns_expected_result() -> None:
     assert result.expansion_ratio == pytest.approx(6.0)
     assert result.thrust_n == pytest.approx(3905.64)
     assert result.specific_impulse_s == pytest.approx(221.258, abs=1e-3)
+
+    assert result.geometry.throat_diameter_m == pytest.approx(0.0319154, abs=1e-6)
+    assert result.geometry.throat_radius_m == pytest.approx(0.0159577, abs=1e-6)
+    assert result.geometry.exit_diameter_m == pytest.approx(0.0781764, abs=1e-6)
+    assert result.geometry.chamber_diameter_m == pytest.approx(0.0713650, abs=1e-6)
+    assert result.geometry.chamber_volume_m3 == pytest.approx(0.0006096, abs=1e-6)
+    assert result.geometry.converging_length_m == pytest.approx(0.0341643, abs=1e-6)
+    assert result.geometry.diverging_length_m == pytest.approx(0.0863242, abs=1e-6)
+    assert result.geometry.expansion_ratio == pytest.approx(6.0)

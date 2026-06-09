@@ -2,6 +2,7 @@ from rise.application.dtos.simulation_input import SimulationInput
 from rise.application.dtos.simulation_result import SimulationResult
 from rise.domain.entities.engine import Engine
 from rise.domain.entities.nozzle import Nozzle
+from rise.domain.services.geometry_service import compute_geometry
 from rise.domain.value_objects.operating_point import OperatingPoint
 
 
@@ -28,9 +29,19 @@ class RunSimulation:
 
         engine.validate()
 
+        geometry = compute_geometry(
+            throat_area_m2=request.throat_area_m2,
+            exit_area_m2=request.exit_area_m2,
+            characteristic_length_m=request.characteristic_length_m,
+            contraction_ratio=request.contraction_ratio,
+            convergent_half_angle_deg=request.convergent_half_angle_deg,
+            divergent_half_angle_deg=request.divergent_half_angle_deg,
+        )
+
         return SimulationResult(
             engine_name=engine.name,
             expansion_ratio=engine.nozzle.expansion_ratio,
             thrust_n=engine.compute_thrust(),
             specific_impulse_s=engine.compute_specific_impulse(),
+            geometry=geometry,
         )
