@@ -27,13 +27,30 @@ def _build_figure(
             y=y_values,
             mode="lines",
             name=title,
+            line=dict(width=2),
         )
     )
     fig.update_layout(
-        title=title,
+        title=dict(
+            text=title,
+            font=dict(size=18),
+            x=0.5,
+            xanchor="center",
+        ),
         xaxis_title="Time (s)",
         yaxis_title=y_label,
         template="plotly_white",
+        xaxis=dict(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="lightgray",
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="lightgray",
+        ),
+        margin=dict(l=80, r=40, t=80, b=60),
     )
     return fig
 
