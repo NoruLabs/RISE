@@ -35,6 +35,9 @@ def test_transient_reaches_steady_state() -> None:
     # Thrust should increase as pressure rises
     assert states[-1].thrust_n > states[0].thrust_n
 
+    # No propellant tracking when not provided
+    assert states[-1].remaining_propellant_kg == 0.0
+
 
 def test_transient_with_short_burn_time() -> None:
     """A very short burn should still return at least the initial state."""
@@ -55,3 +58,27 @@ def test_transient_with_short_burn_time() -> None:
     assert len(states) == 1
     assert states[0].time_s == pytest.approx(0.0)
     assert states[0].chamber_pressure_pa == pytest.approx(2_000_000.0)
+
+
+def test_transient_tracks_propellant_mass() -> None:
+    """Propellant should deplete and stop the simulation when exhausted."""
+    states = compute_transient(
+        initial_chamber_pressure_pa=2_000_000.0,
+        mass_flow_in_kg_s=1.8,
+        ambient_pressure_pa=101_325.0,
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_volume_m3=0.0006096,
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
+        burn_time_s=10.0,
+        time_step_s=0.01,
+        propellant_mass_kg=3.6,  # 2 seconds of burn at 1.8 kg/s
+    )
+
+    assert len(states) > 0
+    assert states[0].remaining_propellant_kg == pytest.approx(3.6)
+    assert states[-1].remaining_propellant_kg == pytest.approx(0.0, abs=1e-6)
+    # Burn should stop before 10 s
+    assert states[-1].time_s < 5.0

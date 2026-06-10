@@ -9,6 +9,7 @@ class TransientState:
     mass_flow_kg_s: float
     thrust_n: float
     specific_impulse_s: float
+    remaining_propellant_kg: float
 
 
 def _compute_exit_mach(expansion_ratio: float, gamma: float) -> float:
@@ -50,6 +51,7 @@ def compute_transient(
     chamber_temperature_k: float,
     burn_time_s: float,
     time_step_s: float,
+    propellant_mass_kg: float | None = None,
 ) -> list[TransientState]:
     """0D chamber pressure transient with isentropic nozzle relations."""
 
@@ -83,6 +85,7 @@ def compute_transient(
     states: list[TransientState] = []
     P_c = initial_chamber_pressure_pa
     t = 0.0
+    remaining = propellant_mass_kg if propellant_mass_kg is not None else None
 
     while t <= burn_time_s + 1e-9:
         m_dot_out = coeff * P_c / math.sqrt(chamber_temperature_k)
@@ -99,11 +102,17 @@ def compute_transient(
                 mass_flow_kg_s=m_dot_out,
                 thrust_n=thrust,
                 specific_impulse_s=isp,
+                remaining_propellant_kg=remaining if remaining is not None else 0.0,
             )
         )
 
         # Implicit Euler: unconditionally stable for linear ODE
         P_c = (P_c + time_step_s * b) / (1.0 + time_step_s * a)
         t += time_step_s
+
+        if remaining is not None:
+            remaining -= mass_flow_in_kg_s * time_step_s
+            if remaining <= 0:
+                break
 
     return states

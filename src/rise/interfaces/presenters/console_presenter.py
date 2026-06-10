@@ -33,5 +33,14 @@ class ConsolePresenter:
                     f"  Final Isp:                {t.specific_impulse_s[-1]:.3f} s",
                 ]
             )
+            if t.remaining_propellant_kg:
+                if t.remaining_propellant_kg[-1] <= 0:
+                    lines.append(
+                        f"  Burn complete at:         {t.time_s[-1]:.3f} s"
+                    )
+                else:
+                    lines.append(
+                        f"  Remaining propellant:      {t.remaining_propellant_kg[-1]:.3f} kg"
+                    )
 
         return "\n".join(lines)
