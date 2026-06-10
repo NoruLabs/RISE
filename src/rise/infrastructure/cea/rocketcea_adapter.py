@@ -28,7 +28,16 @@ class RocketCEAAdapter:
         chamber_pressure_pa: float,
         expansion_ratio: float,
     ) -> ChamberProperties:
-        """Return chamber properties for a given pressure and expansion ratio."""
+        """Return chamber properties for a given pressure and expansion ratio.
+
+        Returns:
+            gamma: Specific heat ratio.
+            molecular_weight_kg_per_kmol: Molecular weight in kg/kmol.
+            chamber_temperature_k: Chamber temperature in Kelvin.
+            cstar_m_s: Characteristic velocity in m/s.
+            isp_vac_s: Vacuum specific impulse in seconds.
+            isp_sea_level_s: Sea level specific impulse in seconds.
+        """
         pc_psia = chamber_pressure_pa / 6894.76  # Pa -> psia
 
         kwargs = {"Pc": pc_psia, "eps": expansion_ratio}
@@ -40,6 +49,9 @@ class RocketCEAAdapter:
             **kwargs
         )
 
+        # Sea level Isp
+        isp_sl, _ = self._cea.estimate_Ambient_Isp(**kwargs)
+
         # Convert units: Rankine -> Kelvin, ft/s -> m/s
         return ChamberProperties(
             gamma=float(gamma),
@@ -47,7 +59,7 @@ class RocketCEAAdapter:
             chamber_temperature_k=float(tc) * 5.0 / 9.0,
             cstar_m_s=float(cstar) * 0.3048,
             isp_vac_s=float(isp_vac),
-            isp_sea_level_s=0.0,  # Not returned by this method
+            isp_sea_level_s=float(isp_sl),
         )
 
     def get_performance_at_exit(
