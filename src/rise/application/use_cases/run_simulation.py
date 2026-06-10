@@ -41,8 +41,13 @@ class RunSimulation:
 
         transient = None
         if request.burn_time_s is not None and request.time_step_s is not None:
+            initial_p = (
+                request.initial_chamber_pressure_pa
+                if request.initial_chamber_pressure_pa is not None
+                else request.chamber_pressure_pa
+            )
             transient = compute_transient(
-                initial_chamber_pressure_pa=request.chamber_pressure_pa,
+                initial_chamber_pressure_pa=initial_p,
                 mass_flow_in_kg_s=request.mass_flow_kg_s,
                 ambient_pressure_pa=request.ambient_pressure_pa,
                 throat_area_m2=request.throat_area_m2,

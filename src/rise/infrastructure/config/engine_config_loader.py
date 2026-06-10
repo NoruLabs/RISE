@@ -28,6 +28,9 @@ def load_engine_config(path: str | Path) -> SimulationInput:
         convergent_half_angle_deg=data["convergent_half_angle_deg"],
         divergent_half_angle_deg=data["divergent_half_angle_deg"],
         nozzle_length_method=data["nozzle_length_method"],
+        initial_chamber_pressure_pa=data.get("initial_chamber_pressure_pa"),
         burn_time_s=data.get("burn_time_s"),
         time_step_s=data.get("time_step_s"),
+        propellant_mass_kg=data.get("propellant_mass_kg"),
+        mass_flow_decay_model=data.get("mass_flow_decay_model"),
     )

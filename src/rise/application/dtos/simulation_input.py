@@ -21,5 +21,8 @@ class SimulationInput:
     convergent_half_angle_deg: float
     divergent_half_angle_deg: float
     nozzle_length_method: str
+    initial_chamber_pressure_pa: float | None = None
     burn_time_s: float | None = None
     time_step_s: float | None = None
+    propellant_mass_kg: float | None = None
+    mass_flow_decay_model: str | None = None
