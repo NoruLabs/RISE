@@ -28,4 +28,6 @@ def load_engine_config(path: str | Path) -> SimulationInput:
         convergent_half_angle_deg=data["convergent_half_angle_deg"],
         divergent_half_angle_deg=data["divergent_half_angle_deg"],
         nozzle_length_method=data["nozzle_length_method"],
+        burn_time_s=data.get("burn_time_s"),
+        time_step_s=data.get("time_step_s"),
     )

@@ -25,6 +25,8 @@ def test_run_simulation_returns_expected_result() -> None:
         convergent_half_angle_deg=30.0,
         divergent_half_angle_deg=15.0,
         nozzle_length_method="80_percent_bell",
+        burn_time_s=10.0,
+        time_step_s=0.01,
     )
 
     use_case = RunSimulation()
@@ -45,3 +47,9 @@ def test_run_simulation_returns_expected_result() -> None:
     assert result.geometry.converging_length_m == pytest.approx(0.0341643, abs=1e-6)
     assert result.geometry.diverging_length_m == pytest.approx(0.0863242, abs=1e-6)
     assert result.geometry.expansion_ratio == pytest.approx(6.0)
+
+    assert result.transient is not None
+    assert len(result.transient) > 0
+    assert result.transient[0].chamber_pressure_pa == pytest.approx(2_000_000.0)
+    assert result.transient[-1].chamber_pressure_pa == pytest.approx(3_950_000.0, rel=0.02)
+    assert result.transient[-1].thrust_n > result.transient[0].thrust_n

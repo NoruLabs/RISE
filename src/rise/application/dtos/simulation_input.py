@@ -21,3 +21,5 @@ class SimulationInput:
     convergent_half_angle_deg: float
     divergent_half_angle_deg: float
     nozzle_length_method: str
+    burn_time_s: float | None = None
+    time_step_s: float | None = None

@@ -26,3 +26,6 @@ def test_cli_main_runs_simulation_successfully(
     assert "Chamber diameter:" in captured.out
     assert "Chamber length:" in captured.out
     assert "Nozzle exit diameter:" in captured.out
+    assert "Transient (0D chamber pressure):" in captured.out
+    assert "Initial chamber pressure:" in captured.out
+    assert "Final chamber pressure:" in captured.out

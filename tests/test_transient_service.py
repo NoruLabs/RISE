@@ -1,0 +1,57 @@
+import pytest
+
+from rise.domain.services.transient_service import TransientState, compute_transient
+
+
+def test_transient_reaches_steady_state() -> None:
+    """The 0D model should converge to the analytical steady-state pressure."""
+    states = compute_transient(
+        initial_chamber_pressure_pa=2_000_000.0,
+        mass_flow_in_kg_s=1.8,
+        ambient_pressure_pa=101_325.0,
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_volume_m3=0.0006096,
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
+        burn_time_s=10.0,
+        time_step_s=0.01,
+    )
+
+    assert isinstance(states, list)
+    assert len(states) > 0
+    assert isinstance(states[0], TransientState)
+
+    # Initial pressure should match input
+    assert states[0].chamber_pressure_pa == pytest.approx(2_000_000.0)
+
+    # Final pressure should be close to steady-state (~3.95 MPa for this case)
+    assert states[-1].chamber_pressure_pa == pytest.approx(3_950_000.0, rel=0.02)
+
+    # Mass flow should increase as pressure rises
+    assert states[-1].mass_flow_kg_s > states[0].mass_flow_kg_s
+
+    # Thrust should increase as pressure rises
+    assert states[-1].thrust_n > states[0].thrust_n
+
+
+def test_transient_with_short_burn_time() -> None:
+    """A very short burn should still return at least the initial state."""
+    states = compute_transient(
+        initial_chamber_pressure_pa=2_000_000.0,
+        mass_flow_in_kg_s=1.8,
+        ambient_pressure_pa=101_325.0,
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_volume_m3=0.0006096,
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
+        burn_time_s=0.0,
+        time_step_s=0.01,
+    )
+
+    assert len(states) == 1
+    assert states[0].time_s == pytest.approx(0.0)
+    assert states[0].chamber_pressure_pa == pytest.approx(2_000_000.0)
