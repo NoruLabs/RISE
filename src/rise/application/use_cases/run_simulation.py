@@ -62,6 +62,7 @@ class RunSimulation:
                 burn_time_s=request.burn_time_s,
                 time_step_s=request.time_step_s,
                 propellant_mass_kg=request.propellant_mass_kg,
+                min_chamber_pressure_pa=request.min_chamber_pressure_pa,
             )
             transient_result = TransientSimulationResult(
                 time_s=[s.time_s for s in states],

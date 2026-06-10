@@ -82,3 +82,29 @@ def test_transient_tracks_propellant_mass() -> None:
     assert states[-1].remaining_propellant_kg == pytest.approx(0.0, abs=1e-6)
     # Burn should stop before 10 s
     assert states[-1].time_s < 5.0
+
+
+def test_transient_stops_on_low_pressure() -> None:
+    """Simulation should stop when chamber pressure drops below threshold."""
+    states = compute_transient(
+        initial_chamber_pressure_pa=2_000_000.0,
+        mass_flow_in_kg_s=0.5,  # Low mass flow so pressure drops
+        ambient_pressure_pa=101_325.0,
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_volume_m3=0.0006096,
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
+        burn_time_s=10.0,
+        time_step_s=0.001,
+        min_chamber_pressure_pa=1_500_000.0,
+    )
+
+    # Should stop before 10 s because pressure falls below threshold
+    assert states[-1].time_s < 5.0
+    # Last recorded pressure should be at or above the threshold
+    assert states[-1].chamber_pressure_pa >= 1_500_000.0
+    # With at least one step recorded, pressure should have decreased
+    if len(states) > 1:
+        assert states[-1].chamber_pressure_pa < states[0].chamber_pressure_pa

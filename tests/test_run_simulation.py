@@ -29,6 +29,7 @@ def test_run_simulation_returns_expected_result() -> None:
         burn_time_s=10.0,
         time_step_s=0.001,
         propellant_mass_kg=18.0,
+        min_chamber_pressure_pa=500_000.0,
         mass_flow_decay_model="constant",
     )
 

@@ -52,6 +52,7 @@ def compute_transient(
     burn_time_s: float,
     time_step_s: float,
     propellant_mass_kg: float | None = None,
+    min_chamber_pressure_pa: float | None = None,
 ) -> list[TransientState]:
     """0D chamber pressure transient with isentropic nozzle relations."""
 
@@ -88,6 +89,10 @@ def compute_transient(
     remaining = propellant_mass_kg if propellant_mass_kg is not None else None
 
     while t <= burn_time_s + 1e-9:
+        # Check minimum pressure cutoff
+        if min_chamber_pressure_pa is not None and P_c < min_chamber_pressure_pa:
+            break
+
         m_dot_out = coeff * P_c / math.sqrt(chamber_temperature_k)
         dP_dt = coeff_press * (mass_flow_in_kg_s - m_dot_out)
 
