@@ -8,10 +8,39 @@ from rise.domain.entities.nozzle import Nozzle
 from rise.domain.services.geometry_service import compute_geometry
 from rise.domain.services.transient_service import compute_transient
 from rise.domain.value_objects.operating_point import OperatingPoint
+from rise.infrastructure.cea.rocketcea_adapter import RocketCEAAdapter
 
 
 class RunSimulation:
     def execute(self, request: SimulationInput) -> SimulationResult:
+        # 1. Call RocketCEA adapter when propellant names are present
+        gamma = request.gamma
+        molecular_weight = request.molecular_weight_kg_per_kmol
+        chamber_temperature = request.chamber_temperature_k
+        exit_velocity = request.exit_velocity_m_s
+        exit_pressure = request.exit_pressure_pa
+
+        if request.oxidizer and request.fuel:
+            adapter = RocketCEAAdapter(
+                oxidizer=request.oxidizer,
+                fuel=request.fuel,
+                mixture_ratio=request.mixture_ratio,
+            )
+            props = adapter.get_chamber_properties(
+                chamber_pressure_pa=request.chamber_pressure_pa,
+                expansion_ratio=request.exit_area_m2 / request.throat_area_m2,
+            )
+            gamma = props.gamma
+            molecular_weight = props.molecular_weight_kg_per_kmol
+            chamber_temperature = props.chamber_temperature_k
+            exit_velocity = props.isp_vac_s * 9.80665
+
+            _, exit_pressure, _ = adapter.get_performance_at_exit(
+                chamber_pressure_pa=request.chamber_pressure_pa,
+                expansion_ratio=request.exit_area_m2 / request.throat_area_m2,
+            )
+
+        # 2. Build domain objects
         nozzle = Nozzle(
             throat_area_m2=request.throat_area_m2,
             exit_area_m2=request.exit_area_m2,
@@ -21,8 +50,8 @@ class RunSimulation:
             chamber_pressure_pa=request.chamber_pressure_pa,
             ambient_pressure_pa=request.ambient_pressure_pa,
             mass_flow_kg_s=request.mass_flow_kg_s,
-            exit_velocity_m_s=request.exit_velocity_m_s,
-            exit_pressure_pa=request.exit_pressure_pa,
+            exit_velocity_m_s=exit_velocity,
+            exit_pressure_pa=exit_pressure,
         )
 
         engine = Engine(
@@ -33,6 +62,7 @@ class RunSimulation:
 
         engine.validate()
 
+        # 3. Geometry
         geometry = compute_geometry(
             throat_area_m2=request.throat_area_m2,
             exit_area_m2=request.exit_area_m2,
@@ -42,6 +72,7 @@ class RunSimulation:
             divergent_half_angle_deg=request.divergent_half_angle_deg,
         )
 
+        # 4. Transient
         transient_result = None
         if request.burn_time_s is not None and request.time_step_s is not None:
             initial_p = (
@@ -56,9 +87,9 @@ class RunSimulation:
                 throat_area_m2=request.throat_area_m2,
                 exit_area_m2=request.exit_area_m2,
                 chamber_volume_m3=geometry.chamber_volume_m3,
-                gamma=request.gamma,
-                molecular_weight_kg_per_kmol=request.molecular_weight_kg_per_kmol,
-                chamber_temperature_k=request.chamber_temperature_k,
+                gamma=gamma,
+                molecular_weight_kg_per_kmol=molecular_weight,
+                chamber_temperature_k=chamber_temperature,
                 burn_time_s=request.burn_time_s,
                 time_step_s=request.time_step_s,
                 propellant_mass_kg=request.propellant_mass_kg,
@@ -74,6 +105,7 @@ class RunSimulation:
                 burn_time_s=request.burn_time_s,
             )
 
+        # 5. Result
         return SimulationResult(
             engine_name=engine.name,
             expansion_ratio=engine.nozzle.expansion_ratio,

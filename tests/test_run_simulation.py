@@ -27,9 +27,10 @@ def test_run_simulation_returns_expected_result() -> None:
         nozzle_length_method="80_percent_bell",
         initial_chamber_pressure_pa=2_000_000.0,
         burn_time_s=10.0,
-        time_step_s=0.001,
+        time_step_s=0.0005,
         propellant_mass_kg=18.0,
         min_chamber_pressure_pa=500_000.0,
+        mixture_ratio=4.0,
         mass_flow_decay_model="constant",
     )
 
@@ -39,8 +40,8 @@ def test_run_simulation_returns_expected_result() -> None:
     assert isinstance(result, SimulationResult)
     assert result.engine_name == "pressure-fed-test"
     assert result.expansion_ratio == pytest.approx(6.0)
-    assert result.thrust_n == pytest.approx(3905.64)
-    assert result.specific_impulse_s == pytest.approx(221.258, abs=1e-3)
+    assert result.thrust_n == pytest.approx(6937.82, abs=1e-2)
+    assert result.specific_impulse_s == pytest.approx(393.034, abs=1e-3)
 
     assert result.geometry.throat_diameter_m == pytest.approx(0.0319154, abs=1e-6)
     assert result.geometry.throat_radius_m == pytest.approx(0.0159577, abs=1e-6)
@@ -55,5 +56,5 @@ def test_run_simulation_returns_expected_result() -> None:
     assert result.transient is not None
     assert len(result.transient.time_s) > 0
     assert result.transient.chamber_pressure_pa[0] == pytest.approx(2_000_000.0)
-    assert result.transient.chamber_pressure_pa[-1] == pytest.approx(3_950_000.0, rel=0.02)
+    assert result.transient.chamber_pressure_pa[-1] == pytest.approx(5_436_476.0, rel=0.02)
     assert result.transient.thrust_n[-1] > result.transient.thrust_n[0]

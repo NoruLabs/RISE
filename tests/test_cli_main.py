@@ -19,8 +19,8 @@ def test_cli_main_runs_simulation_successfully(
     assert "RISE - Rocket Integrated Simulation Environment" in captured.out
     assert "Engine: pressure-fed-test" in captured.out
     assert "Expansion ratio: 6.000" in captured.out
-    assert "Thrust: 3905.640 N" in captured.out
-    assert "Specific impulse: 221.258 s" in captured.out
+    assert "Thrust: 6937.820 N" in captured.out
+    assert "Specific impulse: 393.034 s" in captured.out
     assert "Geometry:" in captured.out
     assert "Throat diameter:" in captured.out
     assert "Chamber diameter:" in captured.out

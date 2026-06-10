@@ -33,5 +33,6 @@ def load_engine_config(path: str | Path) -> SimulationInput:
         time_step_s=data.get("time_step_s"),
         propellant_mass_kg=data.get("propellant_mass_kg"),
         min_chamber_pressure_pa=data.get("min_chamber_pressure_pa"),
+        mixture_ratio=data.get("mixture_ratio"),
         mass_flow_decay_model=data.get("mass_flow_decay_model"),
     )
