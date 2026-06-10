@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 
+from rise.application.dtos.transient_simulation_result import (
+    TransientSimulationResult,
+)
 from rise.domain.services.geometry_service import GeometryResult
-from rise.domain.services.transient_service import TransientState
 
 
 @dataclass(slots=True)
@@ -11,4 +13,4 @@ class SimulationResult:
     thrust_n: float
     specific_impulse_s: float
     geometry: GeometryResult
-    transient: list[TransientState] | None = None
+    transient: TransientSimulationResult | None = None

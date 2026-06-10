@@ -20,18 +20,17 @@ class ConsolePresenter:
         ]
 
         if result.transient:
-            t0 = result.transient[0]
-            t1 = result.transient[-1]
+            t = result.transient
             lines.extend(
                 [
                     "",
                     "Transient (0D chamber pressure):",
-                    f"  Initial chamber pressure: {t0.chamber_pressure_pa:.3f} Pa",
-                    f"  Final chamber pressure:   {t1.chamber_pressure_pa:.3f} Pa",
-                    f"  Initial thrust:           {t0.thrust_n:.3f} N",
-                    f"  Final thrust:             {t1.thrust_n:.3f} N",
-                    f"  Initial Isp:              {t0.specific_impulse_s:.3f} s",
-                    f"  Final Isp:                {t1.specific_impulse_s:.3f} s",
+                    f"  Initial chamber pressure: {t.chamber_pressure_pa[0]:.3f} Pa",
+                    f"  Final chamber pressure:   {t.chamber_pressure_pa[-1]:.3f} Pa",
+                    f"  Initial thrust:           {t.thrust_n[0]:.3f} N",
+                    f"  Final thrust:             {t.thrust_n[-1]:.3f} N",
+                    f"  Initial Isp:              {t.specific_impulse_s[0]:.3f} s",
+                    f"  Final Isp:                {t.specific_impulse_s[-1]:.3f} s",
                 ]
             )
 

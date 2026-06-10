@@ -52,7 +52,7 @@ def test_run_simulation_returns_expected_result() -> None:
     assert result.geometry.expansion_ratio == pytest.approx(6.0)
 
     assert result.transient is not None
-    assert len(result.transient) > 0
-    assert result.transient[0].chamber_pressure_pa == pytest.approx(2_000_000.0)
-    assert result.transient[-1].chamber_pressure_pa == pytest.approx(3_950_000.0, rel=0.02)
-    assert result.transient[-1].thrust_n > result.transient[0].thrust_n
+    assert len(result.transient.time_s) > 0
+    assert result.transient.chamber_pressure_pa[0] == pytest.approx(2_000_000.0)
+    assert result.transient.chamber_pressure_pa[-1] == pytest.approx(3_950_000.0, rel=0.02)
+    assert result.transient.thrust_n[-1] > result.transient.thrust_n[0]

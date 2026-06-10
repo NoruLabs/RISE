@@ -1,5 +1,8 @@
 from rise.application.dtos.simulation_input import SimulationInput
 from rise.application.dtos.simulation_result import SimulationResult
+from rise.application.dtos.transient_simulation_result import (
+    TransientSimulationResult,
+)
 from rise.domain.entities.engine import Engine
 from rise.domain.entities.nozzle import Nozzle
 from rise.domain.services.geometry_service import compute_geometry
@@ -39,14 +42,14 @@ class RunSimulation:
             divergent_half_angle_deg=request.divergent_half_angle_deg,
         )
 
-        transient = None
+        transient_result = None
         if request.burn_time_s is not None and request.time_step_s is not None:
             initial_p = (
                 request.initial_chamber_pressure_pa
                 if request.initial_chamber_pressure_pa is not None
                 else request.chamber_pressure_pa
             )
-            transient = compute_transient(
+            states = compute_transient(
                 initial_chamber_pressure_pa=initial_p,
                 mass_flow_in_kg_s=request.mass_flow_kg_s,
                 ambient_pressure_pa=request.ambient_pressure_pa,
@@ -59,6 +62,14 @@ class RunSimulation:
                 burn_time_s=request.burn_time_s,
                 time_step_s=request.time_step_s,
             )
+            transient_result = TransientSimulationResult(
+                time_s=[s.time_s for s in states],
+                chamber_pressure_pa=[s.chamber_pressure_pa for s in states],
+                mass_flow_kg_s=[s.mass_flow_kg_s for s in states],
+                thrust_n=[s.thrust_n for s in states],
+                specific_impulse_s=[s.specific_impulse_s for s in states],
+                burn_time_s=request.burn_time_s,
+            )
 
         return SimulationResult(
             engine_name=engine.name,
@@ -66,5 +77,5 @@ class RunSimulation:
             thrust_n=engine.compute_thrust(),
             specific_impulse_s=engine.compute_specific_impulse(),
             geometry=geometry,
-            transient=transient,
+            transient=transient_result,
         )
