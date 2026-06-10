@@ -108,3 +108,43 @@ def test_transient_stops_on_low_pressure() -> None:
     # With at least one step recorded, pressure should have decreased
     if len(states) > 1:
         assert states[-1].chamber_pressure_pa < states[0].chamber_pressure_pa
+
+
+def test_transient_curve_structure() -> None:
+    """The transient curve should have consistent time steps and one pressure per step."""
+    burn_time = 5.0
+    time_step = 0.001
+    states = compute_transient(
+        initial_chamber_pressure_pa=2_000_000.0,
+        mass_flow_in_kg_s=1.8,
+        ambient_pressure_pa=101_325.0,
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_volume_m3=0.0006096,
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
+        burn_time_s=burn_time,
+        time_step_s=time_step,
+        propellant_mass_kg=100.0,  # Plenty of propellant
+    )
+
+    # Time steps increase correctly
+    assert len(states) > 1
+    for i in range(1, len(states)):
+        assert states[i].time_s > states[i - 1].time_s
+        delta = states[i].time_s - states[i - 1].time_s
+        assert delta == pytest.approx(time_step, abs=1e-9)
+
+    # Pressure values are produced for each step
+    assert len(states) == len([s for s in states if s.chamber_pressure_pa > 0])
+
+    # Simulation stops at the burn time limit
+    assert states[-1].time_s == pytest.approx(burn_time, abs=1e-9)
+
+    # All expected fields are populated
+    for s in states:
+        assert s.mass_flow_kg_s > 0
+        assert s.thrust_n > 0
+        assert s.specific_impulse_s > 0
+        assert s.remaining_propellant_kg > 0
