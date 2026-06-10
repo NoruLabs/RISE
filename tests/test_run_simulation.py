@@ -27,7 +27,7 @@ def test_run_simulation_returns_expected_result() -> None:
         nozzle_length_method="80_percent_bell",
         initial_chamber_pressure_pa=2_000_000.0,
         burn_time_s=10.0,
-        time_step_s=0.01,
+        time_step_s=0.001,
         propellant_mass_kg=18.0,
         mass_flow_decay_model="constant",
     )

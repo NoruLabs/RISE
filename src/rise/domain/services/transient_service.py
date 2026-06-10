@@ -77,10 +77,10 @@ def compute_transient(
         ** (-(gamma + 1.0) / (2.0 * (gamma - 1.0)))
     )
 
-    # Linear ODE coefficients: dP/dt = b - a*P_c
+    # 0D chamber pressure balance:
+    # dP/dt = (R*T_c / V_c) * (m_dot_in - m_dot_out)
+    # where m_dot_out = coeff * P_c / sqrt(T_c)
     coeff_press = (R * chamber_temperature_k) / chamber_volume_m3
-    a = coeff_press * coeff / math.sqrt(chamber_temperature_k)
-    b = coeff_press * mass_flow_in_kg_s
 
     states: list[TransientState] = []
     P_c = initial_chamber_pressure_pa
@@ -89,6 +89,7 @@ def compute_transient(
 
     while t <= burn_time_s + 1e-9:
         m_dot_out = coeff * P_c / math.sqrt(chamber_temperature_k)
+        dP_dt = coeff_press * (mass_flow_in_kg_s - m_dot_out)
 
         P_e = P_c * P_e_over_P_c
         pressure_thrust = (P_e - ambient_pressure_pa) * exit_area_m2
@@ -106,8 +107,10 @@ def compute_transient(
             )
         )
 
-        # Implicit Euler: unconditionally stable for linear ODE
-        P_c = (P_c + time_step_s * b) / (1.0 + time_step_s * a)
+        # Explicit Euler update
+        P_c = P_c + time_step_s * dP_dt
+        if P_c < 0:
+            P_c = 0.0
         t += time_step_s
 
         if remaining is not None:

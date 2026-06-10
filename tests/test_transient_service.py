@@ -16,7 +16,7 @@ def test_transient_reaches_steady_state() -> None:
         molecular_weight_kg_per_kmol=22.0,
         chamber_temperature_k=3483.35,
         burn_time_s=10.0,
-        time_step_s=0.01,
+        time_step_s=0.001,
     )
 
     assert isinstance(states, list)
@@ -52,7 +52,7 @@ def test_transient_with_short_burn_time() -> None:
         molecular_weight_kg_per_kmol=22.0,
         chamber_temperature_k=3483.35,
         burn_time_s=0.0,
-        time_step_s=0.01,
+        time_step_s=0.001,
     )
 
     assert len(states) == 1
@@ -73,7 +73,7 @@ def test_transient_tracks_propellant_mass() -> None:
         molecular_weight_kg_per_kmol=22.0,
         chamber_temperature_k=3483.35,
         burn_time_s=10.0,
-        time_step_s=0.01,
+        time_step_s=0.001,
         propellant_mass_kg=3.6,  # 2 seconds of burn at 1.8 kg/s
     )
 
