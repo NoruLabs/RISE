@@ -1,16 +1,12 @@
 name: pressure-fed-test
+oxidizer: LOX
+fuel: LH2
+mixture_ratio: 4.0
 throat_area_m2: 0.0008
 exit_area_m2: 0.0048
 chamber_pressure_pa: 2000000.0
 ambient_pressure_pa: 101325.0
 mass_flow_kg_s: 1.8
-exit_velocity_m_s: 2200.0
-exit_pressure_pa: 90000.0
-oxidizer: LOX
-fuel: LH2
-gamma: 1.22
-molecular_weight_kg_per_kmol: 22.0
-chamber_temperature_k: 3483.35
 characteristic_length_m: 0.762
 contraction_ratio: 5.0
 convergent_half_angle_deg: 30.0
@@ -21,5 +17,4 @@ burn_time_s: 10.0
 time_step_s: 0.0005
 propellant_mass_kg: 18.0
 min_chamber_pressure_pa: 500000.0
-mixture_ratio: 4.0
 mass_flow_decay_model: "constant"

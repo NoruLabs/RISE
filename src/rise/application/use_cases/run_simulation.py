@@ -13,7 +13,8 @@ from rise.infrastructure.cea.rocketcea_adapter import RocketCEAAdapter
 
 class RunSimulation:
     def execute(self, request: SimulationInput) -> SimulationResult:
-        # 1. Call RocketCEA adapter when propellant names are present
+        # 1. Thermochemistry: CEA is the source of truth.
+        # Manual fields in the DTO act as optional overrides.
         gamma = request.gamma
         molecular_weight = request.molecular_weight_kg_per_kmol
         chamber_temperature = request.chamber_temperature_k
@@ -30,14 +31,34 @@ class RunSimulation:
                 chamber_pressure_pa=request.chamber_pressure_pa,
                 expansion_ratio=request.exit_area_m2 / request.throat_area_m2,
             )
-            gamma = props.gamma
-            molecular_weight = props.molecular_weight_kg_per_kmol
-            chamber_temperature = props.chamber_temperature_k
-            exit_velocity = props.isp_vac_s * 9.80665
+            # Override CEA values only when manual fields are present
+            gamma = gamma if gamma is not None else props.gamma
+            molecular_weight = (
+                molecular_weight
+                if molecular_weight is not None
+                else props.molecular_weight_kg_per_kmol
+            )
+            chamber_temperature = (
+                chamber_temperature
+                if chamber_temperature is not None
+                else props.chamber_temperature_k
+            )
+            exit_velocity = (
+                exit_velocity
+                if exit_velocity is not None
+                else props.isp_vac_s * 9.80665
+            )
 
-            _, exit_pressure, _ = adapter.get_performance_at_exit(
+            _, cea_exit_pressure, _ = adapter.get_performance_at_exit(
                 chamber_pressure_pa=request.chamber_pressure_pa,
                 expansion_ratio=request.exit_area_m2 / request.throat_area_m2,
+            )
+            exit_pressure = exit_pressure if exit_pressure is not None else cea_exit_pressure
+
+        if gamma is None or molecular_weight is None or chamber_temperature is None:
+            raise ValueError(
+                "Thermochemistry values missing. Provide propellant names for CEA "
+                "or set gamma, molecular_weight, and chamber_temperature manually."
             )
 
         # 2. Build domain objects

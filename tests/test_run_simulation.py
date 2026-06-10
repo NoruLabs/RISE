@@ -13,13 +13,9 @@ def test_run_simulation_returns_expected_result() -> None:
         chamber_pressure_pa=2_000_000.0,
         ambient_pressure_pa=101_325.0,
         mass_flow_kg_s=1.8,
-        exit_velocity_m_s=2_200.0,
-        exit_pressure_pa=90_000.0,
         oxidizer="LOX",
         fuel="LH2",
-        gamma=1.22,
-        molecular_weight_kg_per_kmol=22.0,
-        chamber_temperature_k=3483.35,
+        mixture_ratio=4.0,
         characteristic_length_m=0.762,
         contraction_ratio=5.0,
         convergent_half_angle_deg=30.0,
@@ -30,7 +26,6 @@ def test_run_simulation_returns_expected_result() -> None:
         time_step_s=0.0005,
         propellant_mass_kg=18.0,
         min_chamber_pressure_pa=500_000.0,
-        mixture_ratio=4.0,
         mass_flow_decay_model="constant",
     )
 
