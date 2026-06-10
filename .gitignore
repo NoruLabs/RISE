@@ -5,3 +5,6 @@ __pycache__/
 .python-version
 dist/
 *.egg-info/
+output/
+output_*/
+demo_*.png
