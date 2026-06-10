@@ -21,26 +21,28 @@ class ConsolePresenter:
 
         if result.transient:
             t = result.transient
+            avg_thrust = sum(t.thrust_n) / len(t.thrust_n) if t.thrust_n else 0.0
+            peak_pressure = max(t.chamber_pressure_pa) if t.chamber_pressure_pa else 0.0
+            burn_time = t.time_s[-1] - t.time_s[0] if len(t.time_s) > 1 else 0.0
             lines.extend(
                 [
                     "",
                     "Transient (0D chamber pressure):",
-                    f"  Initial chamber pressure: {t.chamber_pressure_pa[0]:.3f} Pa",
-                    f"  Final chamber pressure:   {t.chamber_pressure_pa[-1]:.3f} Pa",
-                    f"  Initial thrust:           {t.thrust_n[0]:.3f} N",
-                    f"  Final thrust:             {t.thrust_n[-1]:.3f} N",
-                    f"  Initial Isp:              {t.specific_impulse_s[0]:.3f} s",
-                    f"  Final Isp:                {t.specific_impulse_s[-1]:.3f} s",
+                    f"  Initial pressure: {t.chamber_pressure_pa[0]:.3f} Pa",
+                    f"  Peak pressure:    {peak_pressure:.3f} Pa",
+                    f"  Final pressure:   {t.chamber_pressure_pa[-1]:.3f} Pa",
+                    f"  Average thrust:   {avg_thrust:.3f} N",
+                    f"  Burn time:        {burn_time:.3f} s",
                 ]
             )
             if t.remaining_propellant_kg:
                 if t.remaining_propellant_kg[-1] <= 0:
                     lines.append(
-                        f"  Burn complete at:         {t.time_s[-1]:.3f} s"
+                        f"  Burn complete at: {t.time_s[-1]:.3f} s"
                     )
                 else:
                     lines.append(
-                        f"  Remaining propellant:      {t.remaining_propellant_kg[-1]:.3f} kg"
+                        f"  Remaining propellant: {t.remaining_propellant_kg[-1]:.3f} kg"
                     )
 
         return "\n".join(lines)
