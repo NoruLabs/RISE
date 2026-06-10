@@ -10,6 +10,8 @@ requires-python = ">=3.11"
 dependencies = [
     "pyyaml>=6.0",
     "rocketcea>=1.1.0",
+    "plotly>=5.0",
+    "kaleido>=0.2.0",
 ]
 
 [project.optional-dependencies]
