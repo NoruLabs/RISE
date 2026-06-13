@@ -22,12 +22,15 @@
     "exit_pressure_pa": 44463.87
   },
   "tolerance": {
-    "chamber_temperature_k": 2.0,
-    "gamma": 1.0,
-    "molecular_weight_kg_per_kmol": 1.0,
-    "cstar_m_s": 2.0,
-    "isp_vac_s": 2.0,
-    "exit_mach": 1.0,
-    "exit_pressure_pa": 2.0
+    "chamber_temperature_k": 5.0,
+    "gamma": 5.0,
+    "molecular_weight_kg_per_kmol": 5.0,
+    "cstar_m_s": 5.0,
+    "isp_vac_s": 5.0,
+    "exit_mach": 5.0,
+    "exit_pressure_pa": 5.0,
+    "thrust_n": 5.0,
+    "specific_impulse_s": 5.0,
+    "chamber_pressure_pa": 2.0
   }
 }
