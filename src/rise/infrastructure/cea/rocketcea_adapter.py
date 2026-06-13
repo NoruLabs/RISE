@@ -9,7 +9,7 @@ _RANKINE_TO_KELVIN = 5.0 / 9.0
 _FT_S_TO_M_S = 0.3048
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class ChamberProperties:
     gamma: float
     molecular_weight_kg_per_kmol: float

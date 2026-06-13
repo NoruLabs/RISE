@@ -6,7 +6,7 @@ from rise.application.dtos.simulation_input import SimulationInput
 
 
 def load_engine_config(path: str | Path) -> SimulationInput:
-    with open(path, "r") as f:
+    with open(path) as f:
         data = yaml.safe_load(f)
 
     return SimulationInput(

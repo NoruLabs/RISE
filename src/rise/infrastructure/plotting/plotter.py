@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 
 from rise.application.dtos.transient_simulation_result import TransientSimulationResult
 
-
 # Standard filenames for output plots
 _CHAMBER_PRESSURE_PNG = "chamber_pressure.png"
 _CHAMBER_PRESSURE_HTML = "chamber_pressure.html"
@@ -27,30 +26,30 @@ def _build_figure(
             y=y_values,
             mode="lines",
             name=title,
-            line=dict(width=2),
+            line={"width": 2},
         )
     )
     fig.update_layout(
-        title=dict(
-            text=title,
-            font=dict(size=18),
-            x=0.5,
-            xanchor="center",
-        ),
+        title={
+            "text": title,
+            "font": {"size": 18},
+            "x": 0.5,
+            "xanchor": "center",
+        },
         xaxis_title="Time (s)",
         yaxis_title=y_label,
         template="plotly_white",
-        xaxis=dict(
-            showgrid=True,
-            gridwidth=1,
-            gridcolor="lightgray",
-        ),
-        yaxis=dict(
-            showgrid=True,
-            gridwidth=1,
-            gridcolor="lightgray",
-        ),
-        margin=dict(l=80, r=40, t=80, b=60),
+        xaxis={
+            "showgrid": True,
+            "gridwidth": 1,
+            "gridcolor": "lightgray",
+        },
+        yaxis={
+            "showgrid": True,
+            "gridwidth": 1,
+            "gridcolor": "lightgray",
+        },
+        margin={"l": 80, "r": 40, "t": 80, "b": 60},
     )
     return fig
 

@@ -61,6 +61,12 @@ class RunSimulation:
                 "or set gamma, molecular_weight, and chamber_temperature manually."
             )
 
+        if exit_velocity is None or exit_pressure is None:
+            raise ValueError(
+                "Exit velocity or exit pressure missing. Provide propellant names for CEA "
+                "or set exit_velocity_m_s and exit_pressure_pa manually."
+            )
+
         # 2. Build domain objects
         nozzle = Nozzle(
             throat_area_m2=request.throat_area_m2,

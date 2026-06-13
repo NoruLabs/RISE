@@ -1,5 +1,5 @@
-from pathlib import Path
 import argparse
+from pathlib import Path
 
 from rise.application.use_cases.run_simulation import RunSimulation
 from rise.infrastructure.config.engine_config_loader import load_engine_config

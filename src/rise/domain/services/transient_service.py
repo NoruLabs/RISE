@@ -2,7 +2,7 @@ import math
 from dataclasses import dataclass
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class TransientState:
     time_s: float
     chamber_pressure_pa: float
@@ -15,10 +15,13 @@ class TransientState:
 def _compute_exit_mach(expansion_ratio: float, gamma: float) -> float:
     """Solve the area-Mach relation for the supersonic exit Mach number."""
 
-    def _area_mach(M: float) -> float:
-        return (1.0 / M) * (
-            (2.0 / (gamma + 1.0)) * (1.0 + (gamma - 1.0) / 2.0 * M**2.0)
-        ) ** ((gamma + 1.0) / (2.0 * (gamma - 1.0)))
+    def _area_mach(M: float) -> float:  # noqa: N803
+        term: float = (2.0 / (gamma + 1.0)) * (
+            1.0 + (gamma - 1.0) / 2.0 * M**2.0
+        )
+        exponent: float = (gamma + 1.0) / (2.0 * (gamma - 1.0))
+        result: float = (1.0 / M) * (term ** exponent)
+        return result
 
     low, high = 1.0, 20.0
     if _area_mach(high) < expansion_ratio:
@@ -56,19 +59,19 @@ def compute_transient(
 ) -> list[TransientState]:
     """0D chamber pressure transient with isentropic nozzle relations."""
 
-    R_universal = 8314.0  # J/(kmol·K)
-    R = R_universal / molecular_weight_kg_per_kmol  # J/(kg·K)
+    R_universal = 8314.0  # noqa: N806
+    R = R_universal / molecular_weight_kg_per_kmol  # noqa: N806
     g0 = 9.80665
 
     expansion_ratio = exit_area_m2 / throat_area_m2
-    M_e = _compute_exit_mach(expansion_ratio, gamma)
+    M_e = _compute_exit_mach(expansion_ratio, gamma)  # noqa: N806
 
     # Isentropic temperature and pressure ratios (constant)
-    T_e = chamber_temperature_k / (1.0 + (gamma - 1.0) / 2.0 * M_e**2.0)
-    P_e_over_P_c = (1.0 + (gamma - 1.0) / 2.0 * M_e**2.0) ** (
+    T_e = chamber_temperature_k / (1.0 + (gamma - 1.0) / 2.0 * M_e**2.0)  # noqa: N806
+    P_e_over_P_c = (1.0 + (gamma - 1.0) / 2.0 * M_e**2.0) ** (  # noqa: N806
         -gamma / (gamma - 1.0)
     )
-    V_e = M_e * math.sqrt(gamma * R * T_e)
+    V_e = M_e * math.sqrt(gamma * R * T_e)  # noqa: N806
 
     # Choked flow coefficient: m_dot_out = coeff * P_c / sqrt(T_c)
     coeff = (
@@ -84,7 +87,7 @@ def compute_transient(
     coeff_press = (R * chamber_temperature_k) / chamber_volume_m3
 
     states: list[TransientState] = []
-    P_c = initial_chamber_pressure_pa
+    P_c = initial_chamber_pressure_pa  # noqa: N806
     t = 0.0
     remaining = propellant_mass_kg if propellant_mass_kg is not None else None
 
@@ -94,9 +97,9 @@ def compute_transient(
             break
 
         m_dot_out = coeff * P_c / math.sqrt(chamber_temperature_k)
-        dP_dt = coeff_press * (mass_flow_in_kg_s - m_dot_out)
+        dP_dt = coeff_press * (mass_flow_in_kg_s - m_dot_out)  # noqa: N806
 
-        P_e = P_c * P_e_over_P_c
+        P_e = P_c * P_e_over_P_c  # noqa: N806
         pressure_thrust = (P_e - ambient_pressure_pa) * exit_area_m2
         thrust = m_dot_out * V_e + pressure_thrust
         isp = thrust / (m_dot_out * g0) if m_dot_out > 0 else 0.0
@@ -113,9 +116,9 @@ def compute_transient(
         )
 
         # Explicit Euler update
-        P_c = P_c + time_step_s * dP_dt
-        if P_c < 0:
-            P_c = 0.0
+        P_c = P_c + time_step_s * dP_dt  # noqa: N806
+        if P_c < 0:  # noqa: N806
+            P_c = 0.0  # noqa: N806
         t += time_step_s
 
         if remaining is not None:

@@ -1,9 +1,8 @@
 import math
-
 from dataclasses import dataclass
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class GeometryResult:
     throat_diameter_m: float
     throat_radius_m: float

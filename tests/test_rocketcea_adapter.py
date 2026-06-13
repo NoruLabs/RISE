@@ -1,4 +1,3 @@
-import pytest
 
 from rise.infrastructure.cea.rocketcea_adapter import (
     ChamberProperties,

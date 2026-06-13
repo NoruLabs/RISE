@@ -6,7 +6,7 @@ from rise.application.dtos.transient_simulation_result import (
 from rise.domain.services.geometry_service import GeometryResult
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class SimulationResult:
     engine_name: str
     expansion_ratio: float

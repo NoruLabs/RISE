@@ -2,11 +2,11 @@ import pytest
 
 from rise.domain.entities.engine import Engine
 from rise.domain.entities.nozzle import Nozzle
-from rise.domain.value_objects.operating_point import OperatingPoint
 from rise.domain.services.thrust_service import (
     compute_specific_impulse,
     compute_thrust,
 )
+from rise.domain.value_objects.operating_point import OperatingPoint
 
 
 def test_compute_thrust_matches_expected_value(

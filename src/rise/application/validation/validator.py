@@ -2,11 +2,12 @@ import json
 import math
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from rise.infrastructure.cea.rocketcea_adapter import ChamberProperties
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class ValidationResult:
     metric: str
     expected: float
@@ -16,14 +17,14 @@ class ValidationResult:
     passed: bool
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class ValidationSummary:
     case_name: str
     results: list[ValidationResult]
     all_passed: bool
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class TransientValidationResult:
     metric: str
     rms_error: float
@@ -32,7 +33,7 @@ class TransientValidationResult:
     passed: bool
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class TransientValidationSummary:
     case_name: str
     results: list[TransientValidationResult]
@@ -51,9 +52,10 @@ class Validator:
         self._reference = self._load_reference(reference_path)
 
     @staticmethod
-    def _load_reference(path: str | Path) -> dict:
-        with open(path, "r") as f:
-            return json.load(f)
+    def _load_reference(path: str | Path) -> dict[str, Any]:
+        with open(path) as f:
+            data: dict[str, Any] = json.load(f)
+            return data
 
     def validate(self, props: ChamberProperties) -> ValidationSummary:
         """Compare ChamberProperties (steady-state) against reference values."""
@@ -290,11 +292,11 @@ class Validator:
             "|--------|-----------|-----------|------------|-----------|"
         )
 
-        for r in transient_summary.results:
-            status = "PASS" if r.passed else "FAIL"
+        for tr in transient_summary.results:
+            status = "PASS" if tr.passed else "FAIL"
             lines.append(
-                f"| {r.metric} | {r.rms_error:.2f}% | {r.max_error:.2f}% | "
-                f"{r.mean_error:.2f}% | {status} |"
+                f"| {tr.metric} | {tr.rms_error:.2f}% | {tr.max_error:.2f}% | "
+                f"{tr.mean_error:.2f}% | {status} |"
             )
 
         lines.append("")

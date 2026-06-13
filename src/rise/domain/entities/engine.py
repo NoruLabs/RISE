@@ -1,13 +1,14 @@
 from dataclasses import dataclass
+
 from rise.domain.entities.nozzle import Nozzle
-from rise.domain.value_objects.operating_point import OperatingPoint
 from rise.domain.services.thrust_service import (
     compute_specific_impulse,
     compute_thrust,
 )
+from rise.domain.value_objects.operating_point import OperatingPoint
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class Engine:
     name: str
     nozzle: Nozzle

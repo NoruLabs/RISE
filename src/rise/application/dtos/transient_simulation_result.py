@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, frozen=True)
 class TransientSimulationResult:
     time_s: list[float]
     chamber_pressure_pa: list[float]
