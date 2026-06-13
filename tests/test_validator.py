@@ -1,3 +1,4 @@
+import json
 import tempfile
 from pathlib import Path
 
@@ -237,3 +238,83 @@ def test_validator_rms_error_computation() -> None:
 
     max_err = validator._max_error(reference, actual)
     assert max_err == pytest.approx(10.0, abs=0.01)
+
+
+def test_validator_rms_error_returns_zero_when_all_reference_zero() -> None:
+    """RMS error should return 0.0 when all reference values are zero."""
+    validator = Validator.__new__(Validator)
+
+    rms = validator._rms_error([0.0, 0.0, 0.0], [1.0, 2.0, 3.0])
+    assert rms == 0.0
+
+
+def test_validator_steady_state_fails_on_large_error() -> None:
+    """Steady-state validation should fail when metrics exceed tolerance."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        ref_path = Path(tmpdir) / "ref.json"
+        ref_path.write_text(
+            json.dumps(
+                {
+                    "name": "Test",
+                    "expected_values": {
+                        "thrust_n": 1000.0,
+                        "specific_impulse_s": 200.0,
+                        "chamber_pressure_pa": 2_000_000.0,
+                    },
+                    "tolerance": {
+                        "thrust_n": 5.0,
+                        "specific_impulse_s": 5.0,
+                        "chamber_pressure_pa": 5.0,
+                    },
+                }
+            )
+        )
+        validator = Validator(ref_path)
+        summary = validator.validate_steady_state(
+            thrust_n=1000.0 * 1.2,
+            specific_impulse_s=200.0 * 1.2,
+            chamber_pressure_pa=2_000_000.0 * 1.2,
+        )
+
+        assert summary.all_passed is False
+        for r in summary.results:
+            assert r.passed is False
+            assert r.percent_error == pytest.approx(20.0, abs=0.1)
+
+
+def test_validator_transient_fails_on_large_pressure_error(
+    reference_case_path: Path,
+) -> None:
+    """Transient validation should fail when pressure curve has large errors."""
+    validator = Validator(reference_case_path)
+    expected_pc = validator._reference["operating_conditions"]["chamber_pressure_pa"]
+
+    summary = validator.validate_transient(
+        time_s=[0.0, 1.0, 2.0],
+        reference_pressure_pa=[expected_pc, expected_pc, expected_pc],
+        actual_pressure_pa=[expected_pc * 1.5, expected_pc * 1.5, expected_pc * 1.5],
+    )
+
+    assert summary.all_passed is False
+    rms_result = [r for r in summary.results if "rms" in r.metric]
+    assert len(rms_result) > 0
+    assert rms_result[0].passed is False
+
+
+def test_validator_transient_fails_on_large_thrust_error(
+    reference_case_path: Path,
+) -> None:
+    """Transient validation should fail when thrust curve has large errors."""
+    validator = Validator(reference_case_path)
+    expected_thrust = 1000.0
+
+    summary = validator.validate_transient(
+        time_s=[0.0, 1.0, 2.0],
+        reference_thrust_n=[expected_thrust, expected_thrust, expected_thrust],
+        actual_thrust_n=[expected_thrust * 2.0, expected_thrust * 2.0, expected_thrust * 2.0],
+    )
+
+    assert summary.all_passed is False
+    rms_result = [r for r in summary.results if "rms" in r.metric]
+    assert len(rms_result) > 0
+    assert rms_result[0].passed is False

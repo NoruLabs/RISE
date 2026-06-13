@@ -107,3 +107,46 @@ def test_run_simulation_with_lox_lh2_returns_valid_range() -> None:
 
     # Burn should complete
     assert result.transient.remaining_propellant_kg[-1] == pytest.approx(0.0, abs=1e-6)
+
+
+def test_run_simulation_raises_on_missing_thermochemistry() -> None:
+    """Should raise ValueError when no CEA propellants and no manual thermochemistry."""
+    request = SimulationInput(
+        engine_name="missing-chemistry",
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_pressure_pa=2_000_000.0,
+        ambient_pressure_pa=101_325.0,
+        mass_flow_kg_s=1.8,
+        characteristic_length_m=0.762,
+        contraction_ratio=5.0,
+        convergent_half_angle_deg=30.0,
+        divergent_half_angle_deg=15.0,
+        nozzle_length_method="80_percent_bell",
+    )
+
+    with pytest.raises(ValueError, match="Thermochemistry values missing"):
+        RunSimulation().execute(request)
+
+
+def test_run_simulation_raises_on_missing_exit_conditions() -> None:
+    """Should raise ValueError when exit velocity and pressure are missing."""
+    request = SimulationInput(
+        engine_name="missing-exit",
+        throat_area_m2=0.0008,
+        exit_area_m2=0.0048,
+        chamber_pressure_pa=2_000_000.0,
+        ambient_pressure_pa=101_325.0,
+        mass_flow_kg_s=1.8,
+        gamma=1.22,
+        molecular_weight_kg_per_kmol=22.0,
+        chamber_temperature_k=3483.35,
+        characteristic_length_m=0.762,
+        contraction_ratio=5.0,
+        convergent_half_angle_deg=30.0,
+        divergent_half_angle_deg=15.0,
+        nozzle_length_method="80_percent_bell",
+    )
+
+    with pytest.raises(ValueError, match="Exit velocity or exit pressure missing"):
+        RunSimulation().execute(request)
