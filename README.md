@@ -1,5 +1,7 @@
 # RISE
 
+[![CI](https://github.com/NoruLabs/RISE/actions/workflows/ci.yml/badge.svg)](https://github.com/NoruLabs/RISE/actions/workflows/ci.yml)
+
 RISE is the Rocket Integrated Simulation Environment. It is a small Python
 package for modeling rocket engine operating points and computing basic
 performance values such as expansion ratio, thrust, and specific impulse.
