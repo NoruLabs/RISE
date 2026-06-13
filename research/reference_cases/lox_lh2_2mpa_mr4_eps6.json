@@ -1,0 +1,33 @@
+{
+  "name": "LOX_LH2_2MPa_MR4_eps6",
+  "source": "NASA CEA via RocketCEA (LOX/LH2, MR=4.0, Pc=2.0 MPa, eps=6.0)",
+  "propellants": {
+    "oxidizer": "LOX",
+    "fuel": "LH2",
+    "mixture_ratio": 4.0
+  },
+  "operating_conditions": {
+    "chamber_pressure_pa": 2000000.0,
+    "expansion_ratio": 6.0,
+    "ambient_pressure_pa": 101325.0,
+    "mass_flow_kg_s": 1.8
+  },
+  "expected_values": {
+    "chamber_temperature_k": 2898.93,
+    "gamma": 1.176,
+    "molecular_weight_kg_per_kmol": 9.96,
+    "cstar_m_s": 2411.64,
+    "isp_vac_s": 408.50,
+    "exit_mach": 2.954,
+    "exit_pressure_pa": 44463.87
+  },
+  "tolerance": {
+    "chamber_temperature_k": 2.0,
+    "gamma": 1.0,
+    "molecular_weight_kg_per_kmol": 1.0,
+    "cstar_m_s": 2.0,
+    "isp_vac_s": 2.0,
+    "exit_mach": 1.0,
+    "exit_pressure_pa": 2.0
+  }
+}
