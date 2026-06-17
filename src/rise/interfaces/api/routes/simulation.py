@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 
 from rise.application.dtos.simulation_input import SimulationInput
 from rise.application.use_cases.run_simulation import RunSimulation
+from rise.interfaces.api.diagram import build_nozzle_svg
 from rise.interfaces.api.schemas import SimulateRequest, result_to_dict
 
 router = APIRouter()
@@ -50,7 +51,13 @@ def simulate(request: SimulateRequest) -> JSONResponse:
         return JSONResponse(status_code=422, content={"detail": str(exc)})
     except Exception as exc:  # noqa: BLE001
         return JSONResponse(status_code=500, content={"detail": f"Simulation error: {exc}"})
-    return JSONResponse(content=result_to_dict(result))
+
+    # Attach SVG diagram (presentation concern — lives in interfaces layer)
+    svg = build_nozzle_svg(result.geometry)
+
+    result_dict = result_to_dict(result)
+    result_dict["nozzle_svg"] = svg
+    return JSONResponse(content=result_dict)
 
 
 @router.get("/health")
