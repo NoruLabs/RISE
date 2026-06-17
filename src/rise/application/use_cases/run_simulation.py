@@ -1,20 +1,22 @@
 from rise.application.dtos.simulation_input import SimulationInput
-from rise.application.dtos.simulation_result import SimulationResult
+from rise.application.dtos.simulation_result import AltitudePoint, SimulationResult
 from rise.application.dtos.transient_simulation_result import (
     TransientSimulationResult,
 )
 from rise.domain.entities.engine import Engine
 from rise.domain.entities.nozzle import Nozzle
+from rise.domain.services.altitude_service import compute_altitude_sweep
 from rise.domain.services.geometry_service import compute_geometry
 from rise.domain.services.transient_service import compute_transient
 from rise.domain.value_objects.operating_point import OperatingPoint
 from rise.infrastructure.cea.rocketcea_adapter import RocketCEAAdapter
 
+_G0 = 9.80665
+
 
 class RunSimulation:
     def execute(self, request: SimulationInput) -> SimulationResult:
-        # 1. Thermochemistry: CEA is the source of truth.
-        # Manual fields in the DTO act as optional overrides.
+        # 1. Thermochemistry
         gamma = request.gamma
         molecular_weight = request.molecular_weight_kg_per_kmol
         chamber_temperature = request.chamber_temperature_k
@@ -31,7 +33,6 @@ class RunSimulation:
                 chamber_pressure_pa=request.chamber_pressure_pa,
                 expansion_ratio=request.exit_area_m2 / request.throat_area_m2,
             )
-            # Override CEA values only when manual fields are present
             gamma = gamma if gamma is not None else props.gamma
             molecular_weight = (
                 molecular_weight
@@ -46,7 +47,7 @@ class RunSimulation:
             exit_velocity = (
                 exit_velocity
                 if exit_velocity is not None
-                else props.isp_vac_s * 9.80665
+                else props.isp_vac_s * _G0
             )
 
             _, cea_exit_pressure, _ = adapter.get_performance_at_exit(
@@ -66,6 +67,9 @@ class RunSimulation:
                 "Exit velocity or exit pressure missing. Provide propellant names for CEA "
                 "or set exit_velocity_m_s and exit_pressure_pa manually."
             )
+
+        # Apply efficiency factors (Stage 20)
+        exit_velocity = exit_velocity * request.combustion_efficiency * request.nozzle_efficiency
 
         # 2. Build domain objects
         nozzle = Nozzle(
@@ -132,7 +136,27 @@ class RunSimulation:
                 burn_time_s=request.burn_time_s,
             )
 
-        # 5. Result
+        # 5. Altitude sweep (Stage 20)
+        altitude_sweep_result = None
+        if request.altitude_sweep_m:
+            sweep = compute_altitude_sweep(
+                thrust_n_sea_level=engine.compute_thrust(),
+                exit_area_m2=request.exit_area_m2,
+                exit_pressure_pa=exit_pressure,
+                mass_flow_kg_s=request.mass_flow_kg_s,
+                altitudes_m=request.altitude_sweep_m,
+            )
+            altitude_sweep_result = [
+                AltitudePoint(
+                    altitude_m=pt.altitude_m,
+                    ambient_pressure_pa=pt.ambient_pressure_pa,
+                    thrust_n=pt.thrust_n,
+                    specific_impulse_s=pt.specific_impulse_s,
+                )
+                for pt in sweep
+            ]
+
+        # 6. Result
         return SimulationResult(
             engine_name=engine.name,
             expansion_ratio=engine.nozzle.expansion_ratio,
@@ -140,4 +164,5 @@ class RunSimulation:
             specific_impulse_s=engine.compute_specific_impulse(),
             geometry=geometry,
             transient=transient_result,
+            altitude_sweep=altitude_sweep_result,
         )

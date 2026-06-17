@@ -1,16 +1,35 @@
 # Changelog
 
-## [1.0.0] - 2026-06-13
+All notable changes to RISE are documented here.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+## [1.2.0] — Stage 21
 ### Added
-- Domain models: Engine, Nozzle, OperatingPoint
-- Thrust and specific impulse calculation
-- Nozzle geometry: throat, chamber, exit diameter, L*, bell nozzle
-- 0D chamber pressure transient simulation
-- RocketCEA integration for thermochemistry (LOX/LH2 and others)
-- YAML engine config with Pydantic schema validation
-- Plotly plotting: chamber pressure, thrust, mass flow (PNG + HTML)
-- Validation against reference data with error metrics
-- CLI entry point: `rise --config <file>`
-- GitHub Actions CI: ruff, mypy, pytest on every push
-- 99% test coverage
+- `RunParametricStudy` use case: sweeps a single parameter across N values
+- `POST /parametric` API endpoint
+- Parametric Study tab in the dashboard
+- `ParametricResult` DTO holding all individual `SimulationResult` objects
+
+## [1.1.0] — Stage 20
+### Added
+- `combustion_efficiency` field in `SimulationInput` and API schema (default 1.0)
+- `nozzle_efficiency` field in `SimulationInput` and API schema (default 1.0)
+- `AltitudeService` with US Standard Atmosphere 1976 pressure model
+- `altitude_sweep_m` optional field in engine config and API schema
+- `AltitudePoint` in `SimulationResult` — thrust and Isp at each requested altitude
+- Altitude sweep tab in dashboard
+
+## [1.0.0] — Stages 1–16
+### Added
+- Full clean-architecture RISE core: domain, application, infrastructure, interfaces
+- CLI runner with YAML config loading
+- RocketCEA thermochemistry adapter
+- Geometry service (throat, chamber, nozzle dimensions)
+- Transient simulation (Euler integration)
+- Plotly chart output
+- Validation framework
+- FastAPI backend (Stage 17)
+- Web UI dashboard (Stage 18)
+- Nozzle SVG diagram and isentropic flow profiles (Stage 19)
