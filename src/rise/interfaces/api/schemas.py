@@ -11,12 +11,6 @@ from rise.application.dtos.simulation_result import SimulationResult
 
 
 class SimulateRequest(BaseModel):
-    """Engine config sent as JSON to POST /simulate.
-
-    Mirrors EngineConfigSchema but lives in the interfaces layer
-    so the API contract is independent of the config-file schema.
-    """
-
     name: str
     throat_area_m2: float = Field(gt=0)
     exit_area_m2: float = Field(gt=0)
@@ -42,16 +36,17 @@ class SimulateRequest(BaseModel):
     propellant_mass_kg: float | None = Field(default=None, ge=0)
     min_chamber_pressure_pa: float | None = Field(default=None, ge=0)
     mass_flow_decay_model: str | None = None
-    # Stage 20 fields (default 1.0 — no breaking change)
     combustion_efficiency: float = Field(default=1.0, gt=0, le=1.0)
     nozzle_efficiency: float = Field(default=1.0, gt=0, le=1.0)
-    # Stage 20 field
     altitude_sweep_m: list[float] | None = None
 
 
-def result_to_dict(result: SimulationResult) -> dict:  # type: ignore[type-arg]
-    """Convert frozen dataclass result to a JSON-serialisable dict.
+class ParametricRequest(BaseModel):
+    base_config: SimulateRequest
+    parameter: str
+    values: list[float] = Field(min_length=1, max_length=50)
+    compare: list[str] = Field(default_factory=lambda: ["thrust_n", "specific_impulse_s"])
 
-    ponytail: dataclasses.asdict does a full recursive copy — fine for our sizes.
-    """
+
+def result_to_dict(result: SimulationResult) -> dict:  # type: ignore[type-arg]
     return asdict(result)  # type: ignore[call-overload]

@@ -9,141 +9,55 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0f1117;
-      color: #e2e8f0;
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
+      background: #0f1117; color: #e2e8f0; min-height: 100vh;
+      display: grid; grid-template-rows: auto 1fr;
     }
     header {
-      padding: 1.25rem 2rem;
-      background: #1a1d27;
+      padding: 1.25rem 2rem; background: #1a1d27;
       border-bottom: 1px solid #2d3148;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      display: flex; align-items: center; gap: 1rem;
     }
     header h1 { font-size: 1.25rem; font-weight: 600; letter-spacing: 0.05em; color: #a78bfa; }
     header span { font-size: 0.8rem; color: #64748b; }
-    main {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 0;
-      height: calc(100vh - 61px);
-      overflow: hidden;
-    }
-    /* LEFT PANEL */
-    .panel-left {
-      background: #13161f;
-      border-right: 1px solid #2d3148;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
+    main { display: grid; grid-template-columns: 380px 1fr; height: calc(100vh - 61px); overflow: hidden; }
+    .panel-left { background: #13161f; border-right: 1px solid #2d3148; display: flex; flex-direction: column; overflow-y: auto; }
     .panel-section { padding: 1.25rem; border-bottom: 1px solid #1e2235; }
-    .panel-section h2 { font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.75rem; }
-    textarea {
-      width: 100%;
-      height: 320px;
-      background: #0f1117;
-      border: 1px solid #2d3148;
-      border-radius: 6px;
-      color: #e2e8f0;
-      font-family: 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 0.78rem;
-      line-height: 1.6;
-      padding: 0.75rem;
-      resize: vertical;
-      outline: none;
-    }
+    .panel-section h2 { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 0.75rem; }
+    textarea { width: 100%; height: 300px; background: #0f1117; border: 1px solid #2d3148; border-radius: 6px; color: #e2e8f0; font-family: monospace; font-size: 0.78rem; line-height: 1.6; padding: 0.75rem; resize: vertical; outline: none; }
     textarea:focus { border-color: #7c3aed; }
-    button#run-btn {
-      width: 100%;
-      margin-top: 0.75rem;
-      padding: 0.65rem 1rem;
-      background: #7c3aed;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 180ms;
-    }
-    button#run-btn:hover:not(:disabled) { background: #6d28d9; }
-    button#run-btn:disabled { background: #3b2f6b; color: #6b6b9b; cursor: not-allowed; }
-    #error-box {
-      margin-top: 0.75rem;
-      padding: 0.6rem 0.75rem;
-      background: #2d1b1b;
-      border: 1px solid #7f1d1d;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      color: #fca5a5;
-      display: none;
-      white-space: pre-wrap;
-    }
-    /* RESULTS */
-    .panel-right {
-      overflow-y: auto;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .card {
-      background: #13161f;
-      border: 1px solid #2d3148;
-      border-radius: 10px;
-      padding: 1.25rem;
-    }
-    .card h2 { font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.1em; color: #64748b; margin-bottom: 1rem; }
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
+    .run-btn { width: 100%; margin-top: 0.75rem; padding: 0.65rem 1rem; background: #7c3aed; color: #fff; border: none; border-radius: 6px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background 180ms; }
+    .run-btn:hover:not(:disabled) { background: #6d28d9; }
+    .run-btn:disabled { background: #3b2f6b; color: #6b6b9b; cursor: not-allowed; }
+    #error-box { margin-top: 0.75rem; padding: 0.6rem 0.75rem; background: #2d1b1b; border: 1px solid #7f1d1d; border-radius: 6px; font-size: 0.8rem; color: #fca5a5; display: none; white-space: pre-wrap; }
+    .panel-right { overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .card { background: #13161f; border: 1px solid #2d3148; border-radius: 10px; padding: 1.25rem; }
+    .card h2 { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 1rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .kpi { background: #0f1117; border-radius: 8px; padding: 1rem; }
     .kpi .label { font-size: 0.72rem; color: #64748b; margin-bottom: 0.25rem; }
     .kpi .value { font-size: 1.5rem; font-weight: 700; color: #a78bfa; font-variant-numeric: tabular-nums; }
     .kpi .unit { font-size: 0.75rem; color: #475569; margin-top: 0.1rem; }
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     td, th { padding: 0.5rem 0.75rem; border-bottom: 1px solid #1e2235; }
-    th { color: #64748b; font-weight: 500; text-align: left; width: 50%; }
+    th { color: #64748b; font-weight: 500; text-align: left; }
     td { color: #cbd5e1; font-variant-numeric: tabular-nums; }
     .chart { width: 100%; height: 260px; }
-    #welcome {
-      margin: auto;
-      text-align: center;
-      color: #334155;
-    }
+    #welcome { margin: auto; text-align: center; color: #334155; }
     #welcome p { font-size: 0.9rem; margin-top: 0.5rem; }
-    .tab-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-    .tab {
-      padding: 0.4rem 1rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      background: #1a1d27;
-      color: #64748b;
-      border: 1px solid #2d3148;
-      transition: all 180ms;
-    }
+    .tab-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tab { padding: 0.4rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; background: #1a1d27; color: #64748b; border: 1px solid #2d3148; transition: all 180ms; }
     .tab.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+    .param-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
+    .param-row label { font-size: 0.78rem; color: #94a3b8; min-width: 90px; }
+    .param-row input { flex: 1; background: #0f1117; border: 1px solid #2d3148; border-radius: 4px; color: #e2e8f0; padding: 0.3rem 0.5rem; font-size: 0.78rem; }
   </style>
 </head>
 <body>
-
 <header>
   <h1>RISE</h1>
   <span>Rocket Integrated Simulation Environment</span>
 </header>
-
 <main>
-  <!-- LEFT: config input -->
   <div class="panel-left">
     <div class="panel-section">
       <h2>Engine Config (JSON)</h2>
@@ -166,12 +80,31 @@
   "time_step_s": 0.1,
   "propellant_mass_kg": 20
 }'></textarea>
-      <button id="run-btn">&#9654; Run Simulation</button>
+      <button class="run-btn" id="run-btn" onclick="runSimulation()">&#9654; Run Simulation</button>
       <div id="error-box"></div>
+    </div>
+    <div class="panel-section">
+      <h2>Parametric Study</h2>
+      <div class="param-row">
+        <label>Parameter</label>
+        <input id="param-field" value="mixture_ratio" placeholder="e.g. mixture_ratio" />
+      </div>
+      <div class="param-row">
+        <label>Min</label>
+        <input id="param-min" type="number" value="4.0" step="0.1" />
+      </div>
+      <div class="param-row">
+        <label>Max</label>
+        <input id="param-max" type="number" value="7.0" step="0.1" />
+      </div>
+      <div class="param-row">
+        <label>Steps</label>
+        <input id="param-steps" type="number" value="10" min="2" max="50" />
+      </div>
+      <button class="run-btn" id="param-btn" onclick="runParametric()">&#9654; Run Parametric</button>
     </div>
   </div>
 
-  <!-- RIGHT: results -->
   <div class="panel-right" id="results-panel">
     <div id="welcome">
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="1.5">
@@ -183,220 +116,171 @@
 </main>
 
 <script>
-const PLOTLY_LAYOUT = {
-  paper_bgcolor: 'transparent',
-  plot_bgcolor: '#0f1117',
+const BASE_LAYOUT = {
+  paper_bgcolor: 'transparent', plot_bgcolor: '#0f1117',
   font: { color: '#94a3b8', size: 11 },
   margin: { t: 10, r: 16, b: 40, l: 56 },
   xaxis: { gridcolor: '#1e2235', linecolor: '#2d3148' },
   yaxis: { gridcolor: '#1e2235', linecolor: '#2d3148' },
 };
-const PLOTLY_CONFIG = { responsive: true, displayModeBar: false };
+const PC = { responsive: true, displayModeBar: false };
 
-// ---- data fetching ----
+function getConfig() {
+  return JSON.parse(document.getElementById('config-input').value);
+}
+
+function showError(msg) {
+  const b = document.getElementById('error-box');
+  b.textContent = msg; b.style.display = 'block';
+}
+function clearError() {
+  document.getElementById('error-box').style.display = 'none';
+}
+
 async function runSimulation() {
+  clearError();
   const btn = document.getElementById('run-btn');
-  const errBox = document.getElementById('error-box');
-  errBox.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'Running…';
-
+  btn.disabled = true; btn.textContent = 'Running…';
   let payload;
+  try { payload = getConfig(); } catch { showError('Invalid JSON.'); btn.disabled=false; btn.textContent='\u25B6 Run Simulation'; return; }
   try {
-    payload = JSON.parse(document.getElementById('config-input').value);
-  } catch {
-    renderError('Invalid JSON — check your config syntax.');
-    btn.disabled = false;
-    btn.textContent = '\u25B6 Run Simulation';
-    return;
-  }
-
-  try {
-    const res = await fetch('/simulate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    const res = await fetch('/simulate', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
     const data = await res.json();
-    if (!res.ok) {
-      renderError(data.detail || 'Simulation failed.');
-    } else {
-      renderResults(data);
-    }
-  } catch (err) {
-    renderError('Network error: ' + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '\u25B6 Run Simulation';
-  }
+    if (!res.ok) { showError(data.detail || 'Simulation failed.'); }
+    else { renderResults(data); }
+  } catch(e) { showError('Network error: ' + e.message); }
+  finally { btn.disabled=false; btn.textContent='\u25B6 Run Simulation'; }
 }
 
-// ---- rendering ----
-function renderError(msg) {
-  const box = document.getElementById('error-box');
-  box.textContent = msg;
-  box.style.display = 'block';
+async function runParametric() {
+  clearError();
+  const btn = document.getElementById('param-btn');
+  btn.disabled=true; btn.textContent='Running…';
+  let base;
+  try { base = getConfig(); } catch { showError('Invalid JSON in config.'); btn.disabled=false; btn.textContent='\u25B6 Run Parametric'; return; }
+  const field = document.getElementById('param-field').value.trim();
+  const min = parseFloat(document.getElementById('param-min').value);
+  const max = parseFloat(document.getElementById('param-max').value);
+  const steps = parseInt(document.getElementById('param-steps').value, 10);
+  const values = Array.from({length: steps}, (_, i) => min + (max - min) * i / (steps - 1));
+  const payload = { base_config: base, parameter: field, values, compare: ['thrust_n', 'specific_impulse_s'] };
+  try {
+    const res = await fetch('/parametric', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (!res.ok) { showError(data.detail || 'Parametric run failed.'); }
+    else { renderParametricResults(data); }
+  } catch(e) { showError('Network error: ' + e.message); }
+  finally { btn.disabled=false; btn.textContent='\u25B6 Run Parametric'; }
 }
 
+// ---- render helpers ----
 function renderResults(data) {
   const panel = document.getElementById('results-panel');
   panel.innerHTML = '';
-
-  // Tab bar (for future stages — single tab now)
-  // ponytail: tab system ready for Stage 21 parametric tab
+  const tabs = ['Simulation', 'Nozzle Diagram', 'Altitude'];
   const tabBar = document.createElement('div');
   tabBar.className = 'tab-bar';
-  ['Simulation', 'Nozzle Diagram', 'Altitude'].forEach((label, i) => {
+  tabs.forEach((lbl, i) => {
     const t = document.createElement('button');
-    t.className = 'tab' + (i === 0 ? ' active' : '');
-    t.textContent = label;
-    t.dataset.tab = i;
-    t.onclick = () => switchTab(i);
+    t.className = 'tab' + (i===0?' active':'');
+    t.textContent = lbl; t.onclick = () => switchTab('sim', i, tabs.length);
     tabBar.appendChild(t);
   });
   panel.appendChild(tabBar);
 
-  // Tab 0: Simulation
-  const tab0 = document.createElement('div');
-  tab0.id = 'tab-0';
-  tab0.innerHTML = buildSimulationTab(data);
-  panel.appendChild(tab0);
+  const t0 = document.createElement('div'); t0.id='sim-tab-0'; t0.innerHTML=buildSimTab(data); panel.appendChild(t0);
+  const t1 = document.createElement('div'); t1.id='sim-tab-1'; t1.style.display='none';
+  t1.innerHTML = data.nozzle_svg
+    ? `<div class="card" style="padding:1rem">${data.nozzle_svg}</div>`
+    : '<div class="card"><p style="color:#475569;font-size:.85rem">No diagram data.</p></div>';
+  panel.appendChild(t1);
+  const t2 = document.createElement('div'); t2.id='sim-tab-2'; t2.style.display='none';
+  t2.innerHTML = data.altitude_sweep && data.altitude_sweep.length
+    ? `<div class="card"><h2>Altitude — Thrust</h2><div class="chart" id="alt-thrust"></div></div>
+       <div class="card"><h2>Altitude — Isp</h2><div class="chart" id="alt-isp"></div></div>`
+    : '<div class="card"><p style="color:#475569;font-size:.85rem">Add altitude_sweep_m to config.</p></div>';
+  panel.appendChild(t2);
 
-  // Tab 1: Nozzle Diagram (filled by Stage 19)
-  const tab1 = document.createElement('div');
-  tab1.id = 'tab-1';
-  tab1.style.display = 'none';
-  if (data.nozzle_svg) {
-    tab1.innerHTML = `<div class="card">${data.nozzle_svg}</div>`;
-  } else {
-    tab1.innerHTML = '<div class="card"><p style="color:#475569;font-size:.85rem">Nozzle diagram added in Stage 19.</p></div>';
+  if (data.transient) {
+    const tr = data.transient;
+    Plotly.newPlot('chart-pressure', [{x:tr.time_s,y:tr.chamber_pressure_pa.map(v=>v/1e6),mode:'lines',line:{color:'#a78bfa'}}], {...BASE_LAYOUT,yaxis:{...BASE_LAYOUT.yaxis,title:'MPa'},xaxis:{...BASE_LAYOUT.xaxis,title:'s'}}, PC);
+    Plotly.newPlot('chart-thrust', [{x:tr.time_s,y:tr.thrust_n.map(v=>v/1000),mode:'lines',line:{color:'#34d399'}}], {...BASE_LAYOUT,yaxis:{...BASE_LAYOUT.yaxis,title:'kN'},xaxis:{...BASE_LAYOUT.xaxis,title:'s'}}, PC);
+    Plotly.newPlot('chart-massflow', [{x:tr.time_s,y:tr.mass_flow_kg_s,mode:'lines',line:{color:'#f59e0b'}}], {...BASE_LAYOUT,yaxis:{...BASE_LAYOUT.yaxis,title:'kg/s'},xaxis:{...BASE_LAYOUT.xaxis,title:'s'}}, PC);
   }
-  panel.appendChild(tab1);
-
-  // Tab 2: Altitude sweep (filled by Stage 20)
-  const tab2 = document.createElement('div');
-  tab2.id = 'tab-2';
-  tab2.style.display = 'none';
   if (data.altitude_sweep && data.altitude_sweep.length) {
-    tab2.innerHTML = buildAltitudeTab(data.altitude_sweep);
-  } else {
-    tab2.innerHTML = '<div class="card"><p style="color:#475569;font-size:.85rem">Add altitude_sweep_m to your config to see altitude performance.</p></div>';
+    const sw = data.altitude_sweep;
+    setTimeout(() => {
+      Plotly.newPlot('alt-thrust', [{x:sw.map(d=>d.altitude_m/1000),y:sw.map(d=>d.thrust_n/1000),mode:'lines',line:{color:'#a78bfa'}}], {...BASE_LAYOUT,xaxis:{...BASE_LAYOUT.xaxis,title:'km'},yaxis:{...BASE_LAYOUT.yaxis,title:'kN'}}, PC);
+      Plotly.newPlot('alt-isp', [{x:sw.map(d=>d.altitude_m/1000),y:sw.map(d=>d.specific_impulse_s),mode:'lines',line:{color:'#34d399'}}], {...BASE_LAYOUT,xaxis:{...BASE_LAYOUT.xaxis,title:'km'},yaxis:{...BASE_LAYOUT.yaxis,title:'s'}}, PC);
+    }, 50);
   }
-  panel.appendChild(tab2);
-
-  // Render charts after DOM is set
-  if (data.transient) renderTransientCharts(data.transient);
 }
 
-function switchTab(idx) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', i === idx);
-  });
-  [0, 1, 2].forEach(i => {
-    const el = document.getElementById('tab-' + i);
-    if (el) el.style.display = i === idx ? '' : 'none';
-  });
-}
-
-function buildSimulationTab(data) {
+function buildSimTab(data) {
   const g = data.geometry;
-  const t = data.transient;
+  const tr = data.transient;
   return `
-    <div class="card">
-      <h2>Performance</h2>
-      <div class="kpi-grid">
-        <div class="kpi">
-          <div class="label">Thrust</div>
-          <div class="value">${(data.thrust_n / 1000).toFixed(2)}</div>
-          <div class="unit">kN</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Specific Impulse</div>
-          <div class="value">${data.specific_impulse_s.toFixed(1)}</div>
-          <div class="unit">s</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Expansion Ratio</div>
-          <div class="value">${data.expansion_ratio.toFixed(3)}</div>
-          <div class="unit">ε</div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <h2>Geometry</h2>
-      <table>
-        <tr><th>Throat diameter</th><td>${(g.throat_diameter_m * 1000).toFixed(2)} mm</td></tr>
-        <tr><th>Exit diameter</th><td>${(g.exit_diameter_m * 1000).toFixed(2)} mm</td></tr>
-        <tr><th>Chamber diameter</th><td>${(g.chamber_diameter_m * 1000).toFixed(2)} mm</td></tr>
-        <tr><th>Chamber length</th><td>${(g.chamber_length_m * 1000).toFixed(2)} mm</td></tr>
-        <tr><th>Converging length</th><td>${(g.converging_length_m * 1000).toFixed(2)} mm</td></tr>
-        <tr><th>Diverging length</th><td>${(g.diverging_length_m * 1000).toFixed(2)} mm</td></tr>
-        <tr><th>Expansion ratio</th><td>${g.expansion_ratio.toFixed(3)}</td></tr>
-      </table>
-    </div>
-    ${t ? `
-    <div class="card">
-      <h2>Transient — Chamber Pressure</h2>
-      <div class="chart" id="chart-pressure"></div>
-    </div>
-    <div class="card">
-      <h2>Transient — Thrust</h2>
-      <div class="chart" id="chart-thrust"></div>
-    </div>
-    <div class="card">
-      <h2>Transient — Mass Flow</h2>
-      <div class="chart" id="chart-massflow"></div>
-    </div>
+    <div class="card"><h2>Performance</h2><div class="kpi-grid">
+      <div class="kpi"><div class="label">Thrust</div><div class="value">${(data.thrust_n/1000).toFixed(2)}</div><div class="unit">kN</div></div>
+      <div class="kpi"><div class="label">Specific Impulse</div><div class="value">${data.specific_impulse_s.toFixed(1)}</div><div class="unit">s</div></div>
+      <div class="kpi"><div class="label">Expansion Ratio</div><div class="value">${data.expansion_ratio.toFixed(3)}</div><div class="unit">ε</div></div>
+    </div></div>
+    <div class="card"><h2>Geometry</h2><table>
+      <tr><th>Throat Ø</th><td>${(g.throat_diameter_m*1000).toFixed(2)} mm</td></tr>
+      <tr><th>Exit Ø</th><td>${(g.exit_diameter_m*1000).toFixed(2)} mm</td></tr>
+      <tr><th>Chamber Ø</th><td>${(g.chamber_diameter_m*1000).toFixed(2)} mm</td></tr>
+      <tr><th>Chamber length</th><td>${(g.chamber_length_m*1000).toFixed(2)} mm</td></tr>
+      <tr><th>Converging length</th><td>${(g.converging_length_m*1000).toFixed(2)} mm</td></tr>
+      <tr><th>Diverging length</th><td>${(g.diverging_length_m*1000).toFixed(2)} mm</td></tr>
+    </table></div>
+    ${tr ? `
+    <div class="card"><h2>Transient — Pressure</h2><div class="chart" id="chart-pressure"></div></div>
+    <div class="card"><h2>Transient — Thrust</h2><div class="chart" id="chart-thrust"></div></div>
+    <div class="card"><h2>Transient — Mass Flow</h2><div class="chart" id="chart-massflow"></div></div>
     ` : ''}
   `;
 }
 
-function renderTransientCharts(t) {
-  const color = '#a78bfa';
-  Plotly.newPlot('chart-pressure',
-    [{ x: t.time_s, y: t.chamber_pressure_pa.map(v => v / 1e6), mode: 'lines', line: { color } }],
-    { ...PLOTLY_LAYOUT, yaxis: { ...PLOTLY_LAYOUT.yaxis, title: 'Pressure (MPa)' }, xaxis: { ...PLOTLY_LAYOUT.xaxis, title: 'Time (s)' } },
-    PLOTLY_CONFIG
-  );
-  Plotly.newPlot('chart-thrust',
-    [{ x: t.time_s, y: t.thrust_n.map(v => v / 1000), mode: 'lines', line: { color: '#34d399' } }],
-    { ...PLOTLY_LAYOUT, yaxis: { ...PLOTLY_LAYOUT.yaxis, title: 'Thrust (kN)' }, xaxis: { ...PLOTLY_LAYOUT.xaxis, title: 'Time (s)' } },
-    PLOTLY_CONFIG
-  );
-  Plotly.newPlot('chart-massflow',
-    [{ x: t.time_s, y: t.mass_flow_kg_s, mode: 'lines', line: { color: '#f59e0b' } }],
-    { ...PLOTLY_LAYOUT, yaxis: { ...PLOTLY_LAYOUT.yaxis, title: 'Mass Flow (kg/s)' }, xaxis: { ...PLOTLY_LAYOUT.xaxis, title: 'Time (s)' } },
-    PLOTLY_CONFIG
-  );
+function renderParametricResults(data) {
+  const panel = document.getElementById('results-panel');
+  panel.innerHTML = '';
+  const tabBar = document.createElement('div');
+  tabBar.className = 'tab-bar';
+  data.compare.forEach((metric, i) => {
+    const t = document.createElement('button');
+    t.className = 'tab' + (i===0?' active':'');
+    t.textContent = metric.replace(/_/g,' ');
+    t.onclick = () => switchTab('par', i, data.compare.length);
+    tabBar.appendChild(t);
+  });
+  panel.appendChild(tabBar);
+
+  data.compare.forEach((metric, i) => {
+    const div = document.createElement('div');
+    div.id = 'par-tab-' + i;
+    div.style.display = i===0 ? '' : 'none';
+    div.innerHTML = `<div class="card"><h2>${metric.replace(/_/g,' ')} vs ${data.parameter.replace(/_/g,' ')}</h2><div class="chart" id="par-chart-${i}"></div></div>`;
+    panel.appendChild(div);
+    const yvals = data.results.map(r => r[metric] !== undefined ? r[metric] : null);
+    setTimeout(() => {
+      Plotly.newPlot('par-chart-'+i,
+        [{x: data.values, y: yvals, mode:'lines+markers', line:{color:'#a78bfa'}, marker:{color:'#a78bfa'}}],
+        {...BASE_LAYOUT, xaxis:{...BASE_LAYOUT.xaxis,title:data.parameter}, yaxis:{...BASE_LAYOUT.yaxis,title:metric}},
+        PC
+      );
+    }, 50);
+  });
 }
 
-function buildAltitudeTab(sweep) {
-  return `
-    <div class="card">
-      <h2>Altitude Performance</h2>
-      <div class="chart" id="chart-altitude-thrust"></div>
-    </div>
-    <div class="card">
-      <h2>Altitude — Specific Impulse</h2>
-      <div class="chart" id="chart-altitude-isp"></div>
-    </div>
-    <script>
-      const altData = ${JSON.stringify(sweep)};
-      Plotly.newPlot('chart-altitude-thrust',
-        [{ x: altData.map(d => d.altitude_m / 1000), y: altData.map(d => d.thrust_n / 1000), mode: 'lines', line: { color: '#a78bfa' } }],
-        { ...PLOTLY_LAYOUT, xaxis: { ...PLOTLY_LAYOUT.xaxis, title: 'Altitude (km)' }, yaxis: { ...PLOTLY_LAYOUT.yaxis, title: 'Thrust (kN)' } },
-        { responsive: true, displayModeBar: false }
-      );
-      Plotly.newPlot('chart-altitude-isp',
-        [{ x: altData.map(d => d.altitude_m / 1000), y: altData.map(d => d.specific_impulse_s), mode: 'lines', line: { color: '#34d399' } }],
-        { ...PLOTLY_LAYOUT, xaxis: { ...PLOTLY_LAYOUT.xaxis, title: 'Altitude (km)' }, yaxis: { ...PLOTLY_LAYOUT.yaxis, title: 'Isp (s)' } },
-        { responsive: true, displayModeBar: false }
-      );
-    <\/script>
-  `;
+function switchTab(prefix, activeIdx, total) {
+  const tabBar = document.querySelector('.tab-bar');
+  if (!tabBar) return;
+  tabBar.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i===activeIdx));
+  for (let i = 0; i < total; i++) {
+    const el = document.getElementById(prefix + '-tab-' + i);
+    if (el) el.style.display = i===activeIdx ? '' : 'none';
+  }
 }
-
-document.getElementById('run-btn').addEventListener('click', runSimulation);
 </script>
 </body>
 </html>
