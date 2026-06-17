@@ -22,6 +22,11 @@ dev = [
     "ruff>=0.4.0",
     "mypy>=1.10.0",
 ]
+api = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "python-multipart>=0.0.9",
+]
 
 [project.scripts]
 rise = "rise.interfaces.cli.main:main"
