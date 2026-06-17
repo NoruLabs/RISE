@@ -5,8 +5,6 @@ No I/O, no domain logic, no side effects.
 """
 from __future__ import annotations
 
-import math
-
 from rise.domain.services.geometry_service import GeometryResult
 
 # Fixed viewBox so all diagrams have consistent scale
@@ -24,7 +22,6 @@ def build_nozzle_svg(geometry: GeometryResult) -> str:  # noqa: PLR0914
     total_length = g.chamber_length_m + g.converging_length_m + g.diverging_length_m
     max_radius = g.chamber_diameter_m / 2.0
 
-    # Scale factors: map physical space to SVG pixels
     margin_x = 40.0
     margin_y = 20.0
     draw_w = _VB_W - 2 * margin_x
@@ -32,7 +29,6 @@ def build_nozzle_svg(geometry: GeometryResult) -> str:  # noqa: PLR0914
 
     sx = draw_w / total_length if total_length > 0 else 1.0
     sy = (draw_h / 2.0) / max_radius if max_radius > 0 else 1.0
-    cx = _VB_W / 2.0
     cy = _VB_H / 2.0  # centerline
 
     def px(length_m: float) -> float:
@@ -41,7 +37,6 @@ def build_nozzle_svg(geometry: GeometryResult) -> str:  # noqa: PLR0914
     def pr(radius_m: float) -> float:
         return radius_m * sy
 
-    # Key x positions
     x_chamber_start = px(0)
     x_conv_start = px(g.chamber_length_m)
     x_throat = px(g.chamber_length_m + g.converging_length_m)
@@ -51,8 +46,6 @@ def build_nozzle_svg(geometry: GeometryResult) -> str:  # noqa: PLR0914
     r_throat = pr(g.throat_diameter_m / 2.0)
     r_exit = pr(g.exit_diameter_m / 2.0)
 
-    # Upper profile: chamber wall → converging cone → throat → diverging cone
-    # Lower profile is mirrored
     path_upper = (
         f"M {x_chamber_start:.1f} {cy - r_chamber:.1f} "
         f"H {x_conv_start:.1f} "
@@ -66,25 +59,21 @@ def build_nozzle_svg(geometry: GeometryResult) -> str:  # noqa: PLR0914
         f"L {x_exit:.1f} {cy + r_exit:.1f}"
     )
 
-    # Chamber end cap
     cap = (
         f"M {x_chamber_start:.1f} {cy - r_chamber:.1f} "
         f"V {cy + r_chamber:.1f}"
     )
 
-    # Exit plane
     exit_line = (
         f"M {x_exit:.1f} {cy - r_exit:.1f} "
         f"V {cy + r_exit:.1f}"
     )
 
-    # Throat marker (vertical dashed)
     throat_marker = (
         f"M {x_throat:.1f} {cy - r_throat - 12:.1f} "
         f"V {cy + r_throat + 12:.1f}"
     )
 
-    # Dimension labels
     def label(x: float, y: float, text: str, anchor: str = "middle") -> str:
         return f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" font-size="9" fill="#94a3b8">{text}</text>'
 

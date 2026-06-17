@@ -1,6 +1,4 @@
 """Unit tests for AltitudeService US Standard Atmosphere."""
-import pytest
-
 from rise.domain.services.altitude_service import (
     ambient_pressure_pa,
     compute_altitude_sweep,

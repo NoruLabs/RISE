@@ -1,6 +1,4 @@
 """Unit tests for NozzleFlowService isentropic relations."""
-import math
-
 import pytest
 
 from rise.domain.services.nozzle_flow_service import (

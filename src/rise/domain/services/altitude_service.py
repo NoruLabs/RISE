@@ -8,7 +8,6 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-
 _G0 = 9.80665  # m/s^2
 _R_AIR = 287.058  # J/(kg·K)
 
@@ -69,9 +68,7 @@ def compute_altitude_sweep(
     Thrust = F_sl + (p_exit - p_amb) * A_exit
     The momentum term is constant; only the pressure thrust term changes.
     """
-    # Sea-level ambient for reference
     p_amb_sl = ambient_pressure_pa(0.0)
-    # Momentum thrust + pressure thrust at sea level
     momentum_thrust = thrust_n_sea_level - (exit_pressure_pa - p_amb_sl) * exit_area_m2
 
     results: list[AltitudePerformancePoint] = []

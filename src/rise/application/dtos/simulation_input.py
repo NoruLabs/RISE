@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass(slots=True, frozen=True)
@@ -28,8 +28,8 @@ class SimulationInput:
     min_chamber_pressure_pa: float | None = None
     mixture_ratio: float | None = None
     mass_flow_decay_model: str | None = None
-    # Stage 20: efficiency factors.  Default 1.0 — no breaking change.
+    # Efficiency factors. Default 1.0 — no breaking change.
     combustion_efficiency: float = 1.0
     nozzle_efficiency: float = 1.0
-    # Stage 20: optional altitude sweep
+    # Optional altitude sweep
     altitude_sweep_m: list[float] | None = None

@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from rise.application.dtos.transient_simulation_result import TransientSimulationResult
 from rise.domain.services.geometry_service import GeometryResult

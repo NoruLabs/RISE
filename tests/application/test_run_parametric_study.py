@@ -37,8 +37,7 @@ def test_parametric_thrust_differs_across_values():
     uc = RunParametricStudy()
     result = uc.execute(_BASE, "mass_flow_kg_s", [1.0, 2.0, 3.0])
     thrusts = [r.thrust_n for r in result.results]
-    # All three should differ
-    assert len(set(round(t, 2) for t in thrusts)) == 3
+    assert len({round(t, 2) for t in thrusts}) == 3
 
 
 def test_parametric_raises_on_too_many_values():

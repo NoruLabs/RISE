@@ -5,7 +5,6 @@ All functions take numbers and return numbers.
 """
 from __future__ import annotations
 
-import math
 from dataclasses import dataclass
 
 
@@ -41,7 +40,6 @@ def area_ratio_to_mach(area_ratio: float, gamma: float = 1.4, supersonic: bool =
         dlog = (2.0 * gm1 * m) / (gp1 * inner)
         return -(1.0 / m**2) * (inner**exponent) + (1.0 / m) * exponent * (inner**exponent) * dlog
 
-    # Initial guess
     m = 2.0 if supersonic else 0.5
     for _ in range(50):
         fm = f(m)
@@ -77,26 +75,22 @@ def compute_nozzle_flow_profile(
     The total axial span: 0 at chamber inlet → end of nozzle.
     """
     total_length = chamber_length_m + converging_length_m + diverging_length_m
-    throat_x = chamber_length_m + converging_length_m  # axial position of throat
+    throat_x = chamber_length_m + converging_length_m
     points: list[NozzleFlowPoint] = []
 
     for i in range(n_points + 1):
         x = total_length * i / n_points
 
         if x <= chamber_length_m:
-            # Chamber section — uniform, Mach ~ 0.1
             mach = 0.1
-            ar = 1e6  # effectively infinite AR (chamber)
+            ar = 1e6
         elif x <= throat_x:
-            # Converging section — subsonic
             frac = (x - chamber_length_m) / converging_length_m if converging_length_m > 0 else 1.0
-            # Area varies linearly from chamber_area to throat_area
-            chamber_area = throat_area_m2 * (exit_area_m2 / throat_area_m2)  # approximate
+            chamber_area = throat_area_m2 * (exit_area_m2 / throat_area_m2)
             area = chamber_area + (throat_area_m2 - chamber_area) * frac
             ar = area / throat_area_m2
             mach = area_ratio_to_mach(max(ar, 1.0), gamma, supersonic=False)
         else:
-            # Diverging section — supersonic
             frac = (x - throat_x) / diverging_length_m if diverging_length_m > 0 else 1.0
             area = throat_area_m2 + (exit_area_m2 - throat_area_m2) * frac
             ar = area / throat_area_m2
