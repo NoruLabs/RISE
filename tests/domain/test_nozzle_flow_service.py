@@ -1,5 +1,4 @@
 """Unit tests for NozzleFlowService isentropic relations."""
-import pytest
 
 from rise.domain.services.nozzle_flow_service import (
     area_ratio_to_mach,
